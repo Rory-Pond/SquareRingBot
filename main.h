@@ -11,12 +11,12 @@ class Card
 	public:
 		std::string id;
 		std::string name;
-		int rotate;
-		int move;
-		int attack_move;
-		int attack_rotate;
+		int rotate = 0;
+		int move = 0;
+		int attack_move = 0;
+		int attack_rotate = 0;
 		std::vector<int> attack;
-		int damage;
+		int damage = 0;
 		Card(std::string card_id = "AA", std::string card_name = "null", int r = 0, int m = 0, const std::vector<int>& a = {}, int d = 0)
 			: id(card_id), name(card_name), rotate(r), move(m), attack(a), damage(d) {}
 };
@@ -28,14 +28,15 @@ class Action
 		std::string name;
 		std::string id;
 		TokenType token = TokenType::Not_Submitted;
-		int rotate;
-		int move;
-		int attack_move;
-		int attack_rotate;
+		int rotate = 0;
+		int move = 0;
+		int attack_move = 0;
+		int attack_rotate = 0;
+		int damage = 0;
 		std::vector<int> attack;
-		int damage;
-		Action(std::string card_id = "AA", std::string card_name = "null", int r = 0, int m = 0, const std::vector<int>& a = {}, int d = 0)
-		: id(card_id), name(card_name), rotate(r), move(m), attack(a), damage(d) {}
+		Action(std::string card_id = "AA", std::string card_name = "null", int r = 0, int m = 0, const std::vector<int>& a = {}, int d = 0, TokenType tok = TokenType::Not_Submitted)
+			
+		: id(card_id), name(card_name), rotate(r), move(m), attack(a), damage(d), token(tok) {}
 };
 
 inline bool operator==(const Action& lhs, const Action& rhs) {
@@ -45,17 +46,17 @@ inline bool operator==(const Action& lhs, const Action& rhs) {
 class Player 
 {
 	public:
-		int health;
+		int health = 15;
 		int round_wins = 0;
 		vec2 position;
-		int direction;
+		int direction = 0;
 		bool is_dazed;
 		std::vector<Action> deck;
 		std::vector<int> not_usable_card;
 		int statusEffects = 0;
 		int regen = 2;
-		int burst_count;
-		int react_count;
+		int burst_count  = 2;
+		int react_count = 2;
 		
 		void win_round();
 		void reset_round(bool isPlayerRed);
@@ -86,7 +87,9 @@ class Board
 		void printGrid();
 		void resolveTokens();
 		void ResolveTurn();
-		
+		bool red_player_revealed = false;
+		bool blue_player_revealed = false;
+
 		TokenType red_player_token = TokenType::Not_Submitted;
 		TokenType blue_player_token = TokenType::Not_Submitted;
 		

@@ -62,15 +62,16 @@ std::vector<std::vector<Action>> Player::get_all_actions_for_cards(int card_coun
 
 std::vector<std::vector<Action>> Player::get_all_token_moves() const
 {
+	
 	std::vector<std::vector<Action>> token_actions;
-	token_actions.push_back({Action("None", "None", 0, 0)});
+	token_actions.push_back({Action("None",  "None",  0,  0,  {},  0, TokenType::None)});
 	if(react_count > 0)
 	{
-		token_actions.push_back({Action("React", "React", 0, 0)});
+		token_actions.push_back({Action("React",  "React",  0,  0,  {},  0, TokenType::React)});
 	}
 	if(burst_count > 0)
 	{
-		token_actions.push_back({Action("Burst", "Burst", 0, 0)});
+		token_actions.push_back({Action("Burst",  "Burst",  0,  0,  {},  0, TokenType::Burst)});
 	}
 
 	return token_actions;
@@ -79,9 +80,7 @@ std::vector<std::vector<Action>> Player::get_all_token_moves() const
 
 std::vector<std::vector<Action>> Player::get_all_moves() const
 {
-	// return get_all_moves_loop(deck); might not be necessary
 	return get_all_moves_recursive(deck, 2);
-	// return get_all_actions_for_cards(2);
 }
 
 void Player::win_round()

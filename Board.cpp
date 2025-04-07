@@ -105,6 +105,7 @@ void Board::submit_turn_action(const std::vector<Action>& action, bool isPlayerR
 				{
 					player_red_current_action.push_back(action[0]);
 				}
+				red_player_revealed = true;
 			}
 			else
 			{
@@ -112,13 +113,15 @@ void Board::submit_turn_action(const std::vector<Action>& action, bool isPlayerR
 				{
 					player_blue_current_action.push_back(action[0]);
 				}
+				blue_player_revealed = true;
 			}
-			if(red_player_token == TokenType::React && !player_blue_current_action.empty() ||
-			   blue_player_token == TokenType::React && !player_red_current_action.empty() || 
-			   red_player_token != TokenType::React && blue_player_token != TokenType::React)
+			if(red_player_revealed && blue_player_revealed)
 			{
 				turn_order = static_cast<TurnOrder>((turn_order + 1) % 3);
+				red_player_revealed = false;
+				blue_player_revealed = false;
 			}
+			
 			break;
 
 		case Card:
@@ -130,8 +133,11 @@ void Board::submit_turn_action(const std::vector<Action>& action, bool isPlayerR
 			{
 				player_blue_current_action.insert(player_blue_current_action.end(), action.begin(), action.end());
 			}
-			ResolveTurn();
-			turn_order = static_cast<TurnOrder>((turn_order + 1) % 3);
+			if(player_red_current_action.size() >= 2 && player_blue_current_action.size() >= 2)
+			{
+				ResolveTurn();
+				turn_order = static_cast<TurnOrder>((turn_order + 1) % 3);
+			}
 			break;
 	}
 }
@@ -146,6 +152,10 @@ bool randomBool() {
 void Board::ResolveTurn()
 {
 	play_action(player_red_current_action, player_blue_current_action);
+	red_player_token = TokenType::Not_Submitted;
+	blue_player_token = TokenType::Not_Submitted;
+	player_red_current_action.clear();
+	player_blue_current_action.clear();
 }
 
 void Board::resolveTokens()

@@ -35,8 +35,9 @@ void play_game(Board& game1, Bot& bot1, Bot& bot2)
 			std::cout << card.name << ", ";
 		}
 		std::cout << std::endl;
-
-		game1.play_action(bot1_action, bot2_action);
+		game1.submit_turn_action(bot1_action, true);
+		game1.submit_turn_action(bot2_action, false);
+		// game1.play_action(bot1_action, bot2_action);
 	}
 	if(game1.game_winner() == 1)
 	{
@@ -105,7 +106,7 @@ int main() {
 	// game1.play_action({small_deck[2]}, {});
 	// game1.printGrid();
 	
-	play_game(game1, bot1, bot3);
+	play_game(game1, bot1, bot2);
 
 	return 0;
 }

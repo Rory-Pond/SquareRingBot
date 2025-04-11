@@ -11,20 +11,18 @@ enum class TokenType {
 enum TurnOrder {
 	Token = 0,
 	Reveal,
-	Card
+	Card,
+	Attack_Move
 }; 
 
 struct vec2 {
-	int x = 0, y = 0; // Default initialization
+	int x = 0, y = 0;
 
-	// Constructor
 	vec2(int x_val = 0, int y_val = 0) : x(x_val), y(y_val) {}
 
-	// Overload + operator
 	vec2 operator+(const vec2& other) const {
 		return vec2(x + other.x, y + other.y);
 	}
-	// Overload == operator for comparison
 	bool operator==(const vec2& other) const {
 		return x == other.x && y == other.y;
 	}

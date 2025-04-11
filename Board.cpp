@@ -4,6 +4,7 @@
 #include <limits>
 
 #include "main.h"
+#include "Board.h"
 #include "Random.h"
 
 int chebyshev_distance(const vec2& a, const vec2& b) {
@@ -17,128 +18,116 @@ float Board::eval(bool isPlayerRed)
 	return healthChange - distance;
 }
 
-void Board::play_action(std::vector<Action> pRed_cards, std::vector<Action> pBlue_cards)
+void Board::SetCards()
 {
-	if(game_over)
+	if(red_player_cards.size() == 2)
 	{
-		return;
+		red_player_cards.push_back(cardList.getCard("Null"));
 	}
-
-	if(pRed_cards.size() > pBlue_cards.size())
+	if(blue_player_cards.size() == 2)
 	{
-		pBlue_cards.push_back(Action());
-	}
-	if(pBlue_cards.size() > pRed_cards.size())
-	{
-		pRed_cards.push_back(Action());
+		blue_player_cards.push_back(cardList.getCard("Null"));
 	}
 	std::random_device rd;
 	std::mt19937 g(rd());
 	if(player_red.is_dazed)
 	{
 		//shuffle cards
-		std::shuffle(pRed_cards.begin(), pRed_cards.end(), g);
+		std::shuffle(red_player_cards.begin(), red_player_cards.end(), g);
 		player_red.is_dazed = false;
 	}
 	if(player_blue.is_dazed)
 	{
 		//shuffle cards
-		std::shuffle(pBlue_cards.begin(), pBlue_cards.end(), g);
+		std::shuffle(blue_player_cards.begin(), blue_player_cards.end(), g);
 		player_blue.is_dazed = false;
-	}
-
-	for (int i = 0; i < pRed_cards.size(); i++)
-	{
-		playout_action(pRed_cards[i], pBlue_cards[i]);
-		if(player_red.health <= 0 || player_blue.health <= 0)
-		{
-			game_over = true;
-			return;
-		}
-	}
-	
-	turn_count++;
-	if(turn_count == 6 || turn_count == 12 || turn_count == 18)
-	{
-		if(player_red.health>player_blue.health)
-		{
-			player_red.win_round();
-		}
-		else if(player_red.health<player_blue.health)
-		{
-			player_blue.win_round();
-		}
-
-		if(turn_count == 18)
-		{
-			game_over = true;
-			return;
-		}
-		player_red.reset_round(true);
-		player_blue.reset_round(false);
 	}
 }
 
-void Board::submit_turn_action(const std::vector<Action>& action, bool isPlayerRed)
+void Board::submit_turn_action(const std::vector<BaseCard*> action, bool isPlayerRed)
 {
 	switch (turn_order) 
 	{
 		case Token:
-			if(isPlayerRed)
+		if(isPlayerRed)
+		{
+			red_player_token = action[0]->getToken();
+		}
+		else
+		{
+			blue_player_token = action[0]->getToken();
+		}
+		if(red_player_token != TokenType::Not_Submitted && blue_player_token != TokenType::Not_Submitted)
+		{
+			turn_order = TurnOrder::Reveal;
+			resolveTokens();
+			if(red_player_token != TokenType::React && blue_player_token != TokenType::React)
 			{
-				red_player_token = action[0].token;
+				turn_order = TurnOrder::Card;
 			}
-			else
-			{
-				blue_player_token = action[0].token;
-			}
-			if(red_player_token != TokenType::Not_Submitted && blue_player_token != TokenType::Not_Submitted)
-			{
-				resolveTokens();
-				turn_order = static_cast<TurnOrder>((turn_order + 1) % 3);
-			}
-			break;
+		}
+		return;
+		
 		case Reveal:
-			if(isPlayerRed)
+		if(isPlayerRed)
+		{
+			if(blue_player_token == TokenType::React)
 			{
-				if(blue_player_token == TokenType::React)
-				{
-					player_red_current_action.push_back(action[0]);
-				}
-				red_player_revealed = true;
+				red_player_cards.push_back(action[0]);
 			}
-			else
+			red_player_revealed = true;
+		}
+		else
+		{
+			if(red_player_token == TokenType::React)
 			{
-				if(red_player_token == TokenType::React)
-				{
-					player_blue_current_action.push_back(action[0]);
-				}
-				blue_player_revealed = true;
+				blue_player_cards.push_back(action[0]);
 			}
-			if(red_player_revealed && blue_player_revealed)
-			{
-				turn_order = static_cast<TurnOrder>((turn_order + 1) % 3);
-				red_player_revealed = false;
-				blue_player_revealed = false;
-			}
-			
-			break;
-
+			blue_player_revealed = true;
+		}
+		if(red_player_revealed && blue_player_revealed)
+		{
+			turn_order = TurnOrder::Card;
+			red_player_revealed = false;
+			blue_player_revealed = false;
+		}
+		return;
+		
 		case Card:
-			if(isPlayerRed)
-			{
-				player_red_current_action.insert(player_red_current_action.end(), action.begin(), action.end());
-			}
-			else
-			{
-				player_blue_current_action.insert(player_blue_current_action.end(), action.begin(), action.end());
-			}
-			if(player_red_current_action.size() >= 2 && player_blue_current_action.size() >= 2)
-			{
-				ResolveTurn();
-				turn_order = static_cast<TurnOrder>((turn_order + 1) % 3);
-			}
-			break;
+		if(isPlayerRed)
+		{
+			red_player_cards.insert(red_player_cards.end(), action.begin(), action.end());
+		}
+		else
+		{
+			blue_player_cards.insert(blue_player_cards.end(), action.begin(), action.end());
+		}
+		if(red_player_cards.size() >= 2 && blue_player_cards.size() >= 2)
+		{
+			SetCards();
+			ResolveTurn();
+		}
+		return;
+		case Attack_Move:
+		if(isPlayerRed)
+		{
+			red_attack_move = action[0];
+		}
+		else
+		{
+			blue_attack_move = action[0];
+		}
+		if(red_attack_move.has_value() && blue_attack_move.has_value())
+		{
+			playout_action(red_attack_move.value(), blue_attack_move.value());
+			red_attack_move.reset();
+			blue_attack_move.reset();
+			red_attack_move_options.clear();
+			blue_attack_move_options.clear();
+			ResolveTurn();
+		}
+		return;
+		
 	}
 }
 
@@ -151,11 +140,63 @@ bool randomBool() {
 
 void Board::ResolveTurn()
 {
-	play_action(player_red_current_action, player_blue_current_action);
+	while(card_index < 3)
+	{
+		playout_action(red_player_cards[card_index], blue_player_cards[card_index]);
+		if(player_red.health <= 0 || player_blue.health <= 0)
+		{
+			game_over = true;
+		}
+		card_index++;
+		if(red_attack_move_options.size() == 1 && blue_attack_move_options.size() == 1)
+		{
+			red_attack_move = red_attack_move_options[0][0];
+			blue_attack_move = blue_attack_move_options[0][0];
+			playout_action(red_attack_move.value(), blue_attack_move.value());
+			red_attack_move.reset();
+			blue_attack_move.reset();
+			red_attack_move_options.clear();
+			blue_attack_move_options.clear();
+		}
+		if(red_attack_move_options.size() > 1 || blue_attack_move_options.size() > 1)
+		{
+			turn_order = TurnOrder::Attack_Move;
+			return;
+		}
+	}
+	
+	// FinishTurn
+	turn_count++;
+	if(turn_count == 6 || turn_count == 12 || turn_count == 18)
+	{
+		if(player_red.health>player_blue.health)
+		{
+			player_red.win_round();
+		}
+		else if(player_red.health<player_blue.health)
+		{
+			player_blue.win_round();
+		}
+		
+		if(turn_count == 18)
+		{
+			game_over = true;
+			return;
+		}
+		player_red.reset_round(true);
+		player_blue.reset_round(false);
+	}
 	red_player_token = TokenType::Not_Submitted;
 	blue_player_token = TokenType::Not_Submitted;
-	player_red_current_action.clear();
-	player_blue_current_action.clear();
+	red_player_cards.clear();
+	blue_player_cards.clear();
+	red_attack_move.reset();
+	blue_attack_move.reset();
+	red_attack_move_options.clear();
+	blue_attack_move_options.clear();
+	red_player_revealed = false;
+	blue_player_revealed = false;
+	turn_order = TurnOrder::Token;
 }
 
 void Board::resolveTokens()
@@ -171,7 +212,7 @@ void Board::resolveTokens()
 			blue_player_token = TokenType::None;
 		}
 	}
-
+	
 	if(red_player_token == TokenType::React)
 	{
 		player_red.react_count--;
@@ -190,11 +231,11 @@ void Board::resolveTokens()
 	}
 }
 
-std::vector<std::vector<Action>> Board::get_all_moves(bool isPlayerRed) const
+std::vector<std::vector<BaseCard*>> Board::get_all_moves(bool isPlayerRed) const
 {
 	const TokenType self_token  = isPlayerRed ? red_player_token : blue_player_token;
 	const TokenType other_token = isPlayerRed ? blue_player_token : red_player_token;
-
+	
 	int card_count = 2;
 	if (other_token == TokenType::React) --card_count;
 	if (self_token == TokenType::Burst)  ++card_count;
@@ -202,29 +243,32 @@ std::vector<std::vector<Action>> Board::get_all_moves(bool isPlayerRed) const
 	switch (turn_order) {
 		case Token:
 		{
-			if(isPlayerRed)
-			{
-				return player_red.get_all_token_moves();
+			std::vector<std::vector<BaseCard*>> token_options;
+			token_options.push_back({cardList.getCard("Token_None")});
+			
+			const Player& current_player = isPlayerRed ? player_red : player_blue;
+			if (current_player.react_count > 0) {
+				token_options.push_back({cardList.getCard("Token_React")});
 			}
-			else
-			{
-				return player_blue.get_all_token_moves();
+			if (current_player.burst_count > 0) {
+				token_options.push_back({cardList.getCard("Token_Burst")});
 			}
+			return token_options;
 		}
-
+		
 		case Reveal:
 		{
 			if(isPlayerRed)
 			{
 				return (blue_player_token == TokenType::React)
-					   ? player_red.get_all_actions_for_cards(1)
-					   : std::vector<std::vector<Action>>{{Action()}};
+				? player_red.get_all_actions_for_cards(1)
+				: std::vector<std::vector<BaseCard*>>{{cardList.getCard("Null")}};
 			}
 			else
 			{
 				return (red_player_token == TokenType::React)
-					   ? player_blue.get_all_actions_for_cards(1)
-					   : std::vector<std::vector<Action>>{{Action()}};
+				? player_blue.get_all_actions_for_cards(1)
+				: std::vector<std::vector<BaseCard*>>{{cardList.getCard("Null")}};
 			}
 		}
 		
@@ -239,10 +283,20 @@ std::vector<std::vector<Action>> Board::get_all_moves(bool isPlayerRed) const
 				return player_blue.get_all_actions_for_cards(card_count);
 			}
 		}
+		case Attack_Move:
+		{
+			if(isPlayerRed)
+			{
+				return red_attack_move_options;
+			}
+			else
+			{
+				return blue_attack_move_options;
+			}
+		}
 	}
 	return {};
 }
-
 
 bool isOnBoard(vec2 pos)
 {
@@ -252,31 +306,12 @@ bool isOnBoard(vec2 pos)
 vec2 positionFromIndex(int n, int rot)
 {
 	if (n == 0 )
-		return {0,0};
+	return {0,0};
 	if (n < 9)
-		return ONE_SPACE_MOVE[(n-1+rot) % 8];
-
+	return ONE_SPACE_MOVE[(n-1+rot) % 8];
+	
 	return TWO_SPACE_MOVE[(n-10+rot*2) % 16];
 }
-
-// int Board::whos_turn(bool isPlayerRed = true)
-// {
-// 	if(player_red_current_action.empty() && player_blue_current_action.empty())
-// 	{
-// 		if(player_red_react) return isPlayerRed ? 1 : -1;
-// 		if(player_blue_react) return isPlayerRed ? -1 : 1;
-// 		return 0;
-// 	}
-	
-// 	if(player_red_current_action.empty())
-// 		return isPlayerRed ? -1 : 1;
-	
-// 	if(player_blue_current_action.empty())
-// 		return isPlayerRed ? 1 : -1;
-	
-// 	if(player_red_current_action.size() == 1)
-// 		return isPlayerRed ? 1 : -1;
-// }
 
 vec2 combinePDM(vec2 pos, int dir, int move)
 {
@@ -285,70 +320,180 @@ vec2 combinePDM(vec2 pos, int dir, int move)
 	return value;
 }
 
-void Board::playout_action(const Action& pRedCard, const Action& pBlueCard)
+void Board::makeValidMove(int red_move, int blue_move)
 {
-	// std::cout << "pRed: " << pRedCard.name << "	pBlue: " << pBlueCard.name << std::endl;
-	// Movement
-	vec2 pRed_New = combinePDM(player_red.position, player_red.direction, pRedCard.move);
-	vec2 pBlue_New = combinePDM(player_blue.position, player_blue.direction, pBlueCard.move);
-	
-	// Check Movement
-	if(isOnBoard(pRed_New))
-		player_red.position = pRed_New;
-	if(isOnBoard(pBlue_New))
-		player_blue.position = pBlue_New;
-	//TODO Additional Move rules
-
-
-	// Attack Damage
-	bool player_red_hit = false;
-	bool player_blue_hit = false;
-	for(int attackInd : pRedCard.attack)
+	if(red_move == 0 && blue_move == 0)
 	{
-		if(player_blue.position == combinePDM(player_red.position, player_red.direction, attackInd))
-		{
-			
-			player_red_hit = true;
-			player_blue.health = player_blue.health - pRedCard.damage;
-			break;
-		}
-	}
-	for(int attackInd : pBlueCard.attack)
-	{
-		if(player_red.position == combinePDM(player_blue.position, player_blue.direction, attackInd))
-		{
-			player_red.health = player_red.health - pBlueCard.damage;
-			
-			
-		}
-	}
-
-	// Attack Move
-	if(player_red_hit && !player_blue_hit)
-	{
-		vec2 pRed_New_A = combinePDM(player_red.position, player_red.direction, pRedCard.attack_move);
-		if(isOnBoard(pRed_New_A))
-			player_red.position = pRed_New_A;
-		player_red.direction = (player_red.direction + pRedCard.attack_rotate) % 8;
-	}
-	if(player_blue_hit && !player_red_hit)
-	{
-		vec2 pBlue_New_A = combinePDM(player_blue.position, player_blue.direction, pBlueCard.attack_move);
-		if(isOnBoard(pBlue_New_A))
-			player_blue.position = pBlue_New_A;
-		player_blue.direction = (player_blue.direction + pBlueCard.attack_rotate) % 8;
+		return;
 	}
 	
-	// Rotate
-	player_red.direction = (player_red.direction + pRedCard.rotate + 8) % 8;
-	player_blue.direction = (player_blue.direction + pBlueCard.rotate + 8) % 8;
+	vec2 red_new_pos = combinePDM(player_red.position, player_red.direction, red_move);
+	vec2 blue_new_pos = combinePDM(player_blue.position, player_blue.direction, blue_move);
+	
+	if(!isOnBoard(red_new_pos))
+	{
+		red_move = 0;
+		red_new_pos = player_red.position;
+	}
+	if(!isOnBoard(blue_new_pos))
+	{
+		blue_move = 0;
+		blue_new_pos = player_blue.position;
+	}
+	if(red_move == 0 && blue_move == 0)
+	{
+		return;
+	}
+	
+	// Check for collision
+	if(red_new_pos == blue_new_pos && (red_move == 0 || blue_move == 0))
+	{
+		return;
+	}
+	
+	if(red_new_pos == blue_new_pos && red_move != 0 && blue_move != 0)
+	{
+		if(player_red.health > player_blue.health)
+		{
+			player_red.position = red_new_pos;
+			return;
+		}
+		else if(player_red.health < player_blue.health)
+		{
+			player_blue.position = blue_new_pos;
+			return;
+		}
+		else
+		{
+			return;
+		}
+	}
+	
+	bool red_facing_blue = player_blue.position == combinePDM(player_red.position, player_red.direction, 1);
+	bool blue_facing_red = player_red.position == combinePDM(player_blue.position, player_blue.direction, 1);
+	
+	// pressure rule
+	if(red_facing_blue && !blue_facing_red && red_move == 0)
+	{
+		const auto not_allowed_location_1 = combinePDM(player_red.position, player_red.direction, 3);
+		const auto not_allowed_location_2 = combinePDM(player_red.position, player_red.direction, 7);
+		if(blue_new_pos == not_allowed_location_1 || blue_new_pos == not_allowed_location_2)
+		{
+			blue_new_pos = player_blue.position;
+		}
+	}
+	if(blue_facing_red && !red_facing_blue && blue_move == 0)
+	{
+		const auto not_allowed_location_1 = combinePDM(player_blue.position, player_blue.direction, 3);
+		const auto not_allowed_location_2 = combinePDM(player_blue.position, player_blue.direction, 7);
+		if(red_new_pos == not_allowed_location_1 || red_new_pos == not_allowed_location_2)
+		{
+			red_new_pos = player_red.position;
+		}
+	}
+
+	player_blue.position = blue_new_pos;
+	player_red.position = red_new_pos;
+	
+	// Interception Not Coded
 }
 
+void Board::playout_action(const BaseCard* red_card, const BaseCard* blue_card)
+{
+	//Cooldown
+	if(red_card->isCooldown())
+	{
+		player_red.not_usable_card.push_back(red_card->getName());
+	}
+	if(blue_card->isCooldown())
+	{
+		player_blue.not_usable_card.push_back(blue_card->getName());
+	}
+	
+	// Movement
+	makeValidMove(red_card->getMove(), blue_card->getMove());
+	
+	// Attack Damage
+	auto is_hit = [](const Player& attacker, const Player& defender, const std::vector<int>& attack_targets) 
+	{
+		for (int attack_target : attack_targets)
+		{
+			if (defender.position == combinePDM(attacker.position, attacker.direction, attack_target))
+			{
+				return true;
+			}
+		}
+		return false;
+	};
+	
+	bool blue_hits_red = is_hit(player_blue, player_red, blue_card->getAttackTarget());
+	bool red_hits_blue = is_hit(player_red, player_blue, red_card->getAttackTarget());
+	//Dodge
+	if(red_card->dodges_all_attacks())
+	{
+		blue_hits_red = false;
+	}
+	if(blue_card->dodges_all_attacks())
+	{
+		red_hits_blue = false;
+	}
+	
+	//Counter
+	if(red_card->attack_is_counter() != blue_card->attack_is_counter())
+	{
+		if(red_card->attack_is_counter())
+		{
+			blue_hits_red = false;
+		}
+		if(blue_card->attack_is_counter())
+		{
+			red_hits_blue = false;
+		}
+	}
+	
+	//Daze
+	if(red_hits_blue && red_card->daze() && !blue_card->avoids_daze())
+	{
+		player_blue.is_dazed = true;
+	}
+	if(blue_hits_red && blue_card->daze() && !red_card->avoids_daze())
+	{
+		player_red.is_dazed = true;
+	}
+	
+	// Deal Damage
+	if(red_hits_blue)
+	{
+		player_blue.health -= blue_card->getDamageModification(red_card->getDamage());
+	}
+	if(blue_hits_red)
+	{
+		player_red.health -= red_card->getDamageModification(blue_card->getDamage());
+	}
+	
+	// Attack Move
+	red_attack_move_options = LookUpBasicCards(red_card->getAttackMove());
+	blue_attack_move_options = LookUpBasicCards(blue_card->getAttackMove());
+	
+	// Rotate
+	player_red.direction = (player_red.direction + red_card->getRotate() + 8) % 8;
+	player_blue.direction = (player_blue.direction + blue_card->getRotate() + 8) % 8;
+}
+
+std::vector<std::vector<BaseCard*>> Board::LookUpBasicCards(std::vector<std::string> card_names)
+{
+	std::vector<std::vector<BaseCard*>> result;
+	for(auto name : card_names)
+	{
+		result.push_back({cardList.getCard(name)});
+	}
+	return result;
+}
 
 int Board::game_winner(bool isPlayerRed )
 {
 	int winner = 0;
-
+	
 	if(player_red.health > 0 && player_blue.health > 0)
 	{
 		if(player_red.round_wins > player_blue.round_wins)
@@ -360,7 +505,7 @@ int Board::game_winner(bool isPlayerRed )
 			winner =  -1;
 		}
 	}
-
+	
 	if(player_blue.health <= 0) 
 	{
 		winner = 1;
@@ -377,7 +522,7 @@ int Board::game_winner(bool isPlayerRed )
 }
 
 void Board::printGrid() {
-
+	
 	auto getDirection = [](int value, bool isPlayerRed) -> std::string {
 		return DIRECTION_LOOKUP[value][isPlayerRed];
 	};
@@ -390,18 +535,18 @@ void Board::printGrid() {
 		for (int x = 0; x < 5; ++x) 
 		{
 			if (x == player_red.position.x && y == player_red.position.y)
-				std::cout << getDirection(player_red.direction, true);
+			std::cout << getDirection(player_red.direction, true);
 			else if (x == player_blue.position.x && y == player_blue.position.y)
-				std::cout << getDirection(player_blue.direction, false);
+			std::cout << getDirection(player_blue.direction, false);
 			else
-				std::cout << ".";
+			std::cout << ".";
 			std::cout << " ";
 		}
 		std::cout << "|";
 		if(y==3) 
-			std::cout << getDirection(player_red.direction, true) << "1♥: " << player_red.health;
+		std::cout << getDirection(player_red.direction, true) << "1♥: " << player_red.health;
 		if(y==2) 
-			std::cout << getDirection(player_blue.direction, false) << "2♥: " << player_blue.health;
+		std::cout << getDirection(player_blue.direction, false) << "2♥: " << player_blue.health;
 		std::cout << "\n";
 	}
 	std::cout << "+" << std::string(11, '-') << "+" << std::endl;

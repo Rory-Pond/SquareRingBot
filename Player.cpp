@@ -9,9 +9,9 @@
 #include "main.h"
 
 
-std::vector<std::vector<Action>> get_all_moves_recursive(std::vector<Action> deck, int depth) {
-	std::vector<std::vector<Action>> moves;
-	std::vector<Action> current_combination;
+std::vector<std::vector<BaseCard*>> get_all_moves_recursive(std::vector<BaseCard*> deck, int depth) {
+	std::vector<std::vector<BaseCard*>> moves;
+	std::vector<BaseCard*> current_combination;
 
 	// Helper function for recursion
 	std::function<void(int)> generate_combinations = [&](int start) {
@@ -36,14 +36,14 @@ std::vector<std::vector<Action>> get_all_moves_recursive(std::vector<Action> dec
 }
 
 
-std::vector<std::vector<Action>> Player::get_all_actions_for_cards(int card_count) const
+std::vector<std::vector<BaseCard*>> Player::get_all_actions_for_cards(int card_count) const
 {
 	return get_all_moves_recursive(deck, card_count);
 }
 
-std::vector<std::vector<Action>> Player::get_all_actions_for_cards(int card_count, std::vector<std::vector<Action>> not_allowed) const
+std::vector<std::vector<BaseCard*>> Player::get_all_actions_for_cards(int card_count, std::vector<std::vector<BaseCard*>> not_allowed) const
 {
-	std::vector<Action> deck_copy = deck;
+	std::vector<BaseCard*> deck_copy = deck;
 	for(auto action : not_allowed)
 	{
 		for(auto card : action)
@@ -59,26 +59,7 @@ std::vector<std::vector<Action>> Player::get_all_actions_for_cards(int card_coun
 	return get_all_moves_recursive(deck_copy, card_count);
 }
 
-
-std::vector<std::vector<Action>> Player::get_all_token_moves() const
-{
-	
-	std::vector<std::vector<Action>> token_actions;
-	token_actions.push_back({Action("None",  "None",  0,  0,  {},  0, TokenType::None)});
-	if(react_count > 0)
-	{
-		token_actions.push_back({Action("React",  "React",  0,  0,  {},  0, TokenType::React)});
-	}
-	if(burst_count > 0)
-	{
-		token_actions.push_back({Action("Burst",  "Burst",  0,  0,  {},  0, TokenType::Burst)});
-	}
-
-	return token_actions;
-}
-
-
-std::vector<std::vector<Action>> Player::get_all_moves() const
+std::vector<std::vector<BaseCard*>> Player::get_all_moves() const
 {
 	return get_all_moves_recursive(deck, 2);
 }
@@ -98,18 +79,18 @@ void Player::reset_round(bool isPlayerRed)
 /*
 
 
-std::vector<std::vector<Action>> get_all_moves_loop_1(std::vector<Action> deck)
+std::vector<std::vector<BaseCard*>> get_all_moves_loop_1(std::vector<BaseCard*> deck)
 {
-	std::vector<std::vector<Action>> moves;
+	std::vector<std::vector<BaseCard*>> moves;
 	for (int i = 0; i < deck.size(); ++i)
 	{
 		moves.push_back({deck[i]});
 	}
 	return moves;
 }
-std::vector<std::vector<Action>> get_all_moves_loop_2(std::vector<Action> deck)
+std::vector<std::vector<BaseCard*>> get_all_moves_loop_2(std::vector<BaseCard*> deck)
 {
-	std::vector<std::vector<Action>> moves;
+	std::vector<std::vector<BaseCard*>> moves;
 	for (int i = 0; i < deck.size(); ++i)
 	{
 		for (int j = 0; j < deck.size(); ++j)
@@ -122,9 +103,9 @@ std::vector<std::vector<Action>> get_all_moves_loop_2(std::vector<Action> deck)
 	}
 	return moves;
 }
-std::vector<std::vector<Action>> get_all_moves_loop_3(std::vector<Action> deck)
+std::vector<std::vector<BaseCard*>> get_all_moves_loop_3(std::vector<BaseCard*> deck)
 {
-	std::vector<std::vector<Action>> moves;
+	std::vector<std::vector<BaseCard*>> moves;
 	for (int i = 0; i < deck.size(); ++i)
 	{
 		for (int j = 0; j < deck.size(); ++j)
@@ -144,7 +125,7 @@ std::vector<std::vector<Action>> get_all_moves_loop_3(std::vector<Action> deck)
 	return moves;
 }
 
-std::string deck_hash(std::vector<Action> deck)
+std::string deck_hash(std::vector<BaseCard*> deck)
 {
 	std::string hash;
 	for(auto card : deck)
@@ -154,9 +135,9 @@ std::string deck_hash(std::vector<Action> deck)
 	return hash;
 }
 
-std::vector<std::vector<Action>> get_all_moves_look_up(std::vector<Action> deck)
+std::vector<std::vector<BaseCard*>> get_all_moves_look_up(std::vector<BaseCard*> deck)
 {
-	static std::map<std::string, std::vector<std::vector<Action>>> move_map;
+	static std::map<std::string, std::vector<std::vector<BaseCard*>>> move_map;
 	auto key = deck_hash(deck);
 	if(!move_map.contains(key))
 	{

@@ -7,7 +7,8 @@
 
 #include "constants.h"
 #include "main.h"
-#include "Random.h"
+
+/*
 
 class MCTSNode {
 public:
@@ -120,3 +121,5 @@ private:
 		return (*best_child)->move;
 	}
 };
+
+*/

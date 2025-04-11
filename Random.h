@@ -7,10 +7,10 @@
 
 #include "main.h"
 
-class Random: public Bot
+class RandomBot: public Bot
 {
 	public:
-	std::vector<Action> find_best_move(const Board& board, bool isPlayerRed)
+	std::vector<BaseCard*> find_best_move(const Board& board, bool isPlayerRed)
 	{
 		auto moves = board.get_all_moves(isPlayerRed);
 		if (moves.empty()) return {};

@@ -8,6 +8,7 @@
 #include "libary.h"
 #include "MCTSBot.h"
 #include "Random.h"
+#include "Monte.h"
 
 void play_game(Board& game1, Bot& bot1, Bot& bot2)
 {
@@ -196,6 +197,11 @@ int main() {
 	// small_deck.push_back(Uppercut());
 	
 	RandomBot bot1, bot2;
+	GreedyBot bot3;
+	RandomSumBot bot4;
+	TimedRandomSumBot bot5, bot6;
+	RandmSumParrallelBot bot7;
+	MCTSBot bot8;
 	// // BestCurrent bot3;
 	// // MCTSBot bot4;
 	Player alice(15, {1,1}, 1, Oscar_Deck);
@@ -214,7 +220,7 @@ int main() {
 	// std::cout << game1.player_blue.position.x << " " << game1.player_blue.position.y << std::endl;
 	// game1.printGrid();
 	
-	play_game(game1, bot1, bot2);
+	play_game(game1, bot6, bot8);
 	
 	return 0;
 }

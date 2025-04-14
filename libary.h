@@ -56,23 +56,23 @@ class Libary
 		cards["Token_None"] = std::make_unique<TokenCard>("Token_None", TokenType::None);
 		cards["Token_Burst"] = std::make_unique<TokenCard>("Token_Burst", TokenType::Burst);
 		cards["Token_React"] = std::make_unique<TokenCard>("Token_React", TokenType::React);
-		
-		cards["Cannonita_Oscar"] = std::make_unique<AttackRoundCard>("Cannonita_Oscar", Attack_Double_Forwards, 5, 4, 3, HAS_COOLDOWN);
+
+		cards["Cannonita_Oscar"] = std::make_unique<AttackCardWithRoundEffect>("Cannonita_Oscar", Attack_Double_Forwards, 5, {}, HAS_COOLDOWN, false, std::array<int, 3>{0, -1, -2});
 		cards["Cajones_Oscar"] = std::make_unique<DamageModificationCard>("Cajones_Oscar", 3, CanBeDazed, increase_Burst); //attack move rotate
-		cards["Left_Haymaker_Oscar"] = std::make_unique<AttackRoundCard>("Left_Haymaker_Oscar", Attack_Left, 4, 3, 2);
-		cards["El_Nuke_Oscar"] = std::make_unique<AttackRoundCard>("El_Nuke_Oscar", Attack_Right, 8, 6, 4, HAS_COOLDOWN, HAS_DAZE);
-		
+		cards["Left_Haymaker_Oscar"] = std::make_unique<AttackCardWithRoundEffect>("Left_Haymaker_Oscar", Attack_Left,4, {}, false, false, {0, -1, -2});
+		cards["Left_Haymaker_Oscar"] = std::make_unique<AttackCardWithRoundEffect>("El_Nuke_Oscar", Attack_Left, 8, {}, HAS_COOLDOWN, HAS_DAZE, {0, -2, -4});
+
 		cards["Left_Jab_Inga"] = std::make_unique<AttackCard>("Left_Jab_Inga", Attack_Far_Left, 1, std::vector<std::string>{"Move_Left", "Move_Forwards_Left_Rotate", "Move_Backwards_Left_Rotate"});
 		cards["Right_Hook_Inga"] = std::make_unique<AttackCard>("Right_Hook_Inga", Attack_Right, 2, std::vector<std::string>{"Move_Right"});
 		cards["Svallin_Inga"] = std::make_unique<DamageModificationCard>("Svallin_Inga", -3, CannotBeDazed);
-		cards["Mjolnir_Inga"] = std::make_unique<AttackRoundCard>("Mjolnir_Inga", Attack_Double_Forwards, 4, 5, 6, HAS_COOLDOWN, HAS_DAZE);
+		cards["Mjolnir_Inga"] = std::make_unique<AttackCardWithRoundEffect>("Mjolnir_Inga", Attack_Double_Forwards, 4, {}, HAS_COOLDOWN, HAS_DAZE, {0, 1, 2});
 		
-		// cards["Left_Hook_Fredo"] = std::make_unique<PreviousAtctionCard>("Left_Hook_Fredo", Attack_Left, 3, "Grill_Guard_Fredo", 1); //todo if after card then +1
-		// cards["Right_Hook_Fredo"] = std::make_unique<PreviousAtctionCard>("Right_Hook_Fredo", Attack_Right, 3, "Grill_Guard_Fredo", 1); //todo if after card then +1
+		cards["Left_Hook_Fredo"] = std::make_unique<AttackCardWithPreviousCardEffect>("Left_Hook_Fredo", Attack_Left, 3, {}, false, false, "Grill_Guard_Fredo", 1);
+		cards["Right_Hook_Fredo"] = std::make_unique<PreviousCardEffect>("Right_Hook_Fredo", Attack_Right, 3, {}, false, false, "Grill_Guard_Fredo", 1);
+		cards["Uppercut_Fredo"] = std::make_unique<PreviousCardEffect>("Uppercut_Fredo", Attack_Forwards, 5, {}, false, false, "Grill_Guard_Fredo", 3, true);
 		// cards["Grill_Guard_Fredo"] = std::make_unique<AttackCard>("Grill_Guard_Fredo", "Rotate_45"); //todo damage reduction -2 prevent daze
-		// cards["Uppercut_Fredo"] = std::make_unique<PreviousAtctionCard>("Uppercut_Fredo", Attack_Forwards, 5, "Grill_Guard_Fredo"); //todo if after card then +3 and daze
 		
-		// cards["Collider_Andrey"] = std::make_unique<PreviousAtctionCard>("Collider_Andrey", Attack_Double_Forwards, 2, "Quantum Jab", +2, std::vector<std::string>{"Move_Right_Rotate"});
+		cards["Collider_Andrey"] = std::make_unique<PreviousCardEffect>("Collider_Andrey", Attack_Double_Forwards, 2, "Quantum Jab", +2, std::vector<std::string>{"Move_Right_Rotate"});
 		// cards["Quantum_Jab_Andrey"] = std::make_unique<AttackCard>("Quantum_Jab_Andrey", Attack_Far_All, 1, "Move_Left_Rotate", "Move_Right_Rotate", HAS_COUNTER);
 		// cards["Paradox_Andrey"] = std::make_unique<AttackCard>("Paradox_Andrey");  //todo swap for collider or left_rotate
 		// cards["Entangle_Andrey"] = std::make_unique<AttackCard>("Entangle_Andrey", Attack_Forwards, 0); //todo if lands, no damage dealt by either character till movement

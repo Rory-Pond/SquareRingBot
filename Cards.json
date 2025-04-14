@@ -1,0 +1,271 @@
+[
+	{
+	  "name": "Cannonita_Oscar",
+	  "type": "AttackCardWithRoundEffect",
+	  "attack_target": "Attack_Double_Forwards",
+	  "damage": 5,
+	  "attack_move": [],
+	  "cooldown": true,
+	  "daze": false,
+	  "round_damage": [0, -1, -2]
+	},
+	{
+	  "name": "Cajones_Oscar",
+	  "type": "DamageModificationCard",
+	  "damageModifier": 3,
+	  "CannotBeDazed": true,
+	  "increase_Burst": true,
+	  "comment": "attack move rotate"
+	},
+	{
+	  "name": "Left_Haymaker_Oscar",
+	  "type": "AttackCardWithRoundEffect",
+	  "attack_target": "Attack_Left",
+	  "damage": 4,
+	  "attack_move": [],
+	  "cooldown": false,
+	  "daze": false,
+	  "round_damage": [0, -1, -2]
+	},
+	{
+	  "name": "El_Nuke_Oscar",
+	  "type": "AttackCardWithRoundEffect",
+	  "attack_target": "Attack_Left",
+	  "damage": 8,
+	  "attack_move": [],
+	  "cooldown": true,
+	  "daze": true,
+	  "round_damage": [0, -2, -4]
+	},
+	{
+	  "name": "Left_Jab_Inga",
+	  "type": "AttackCard",
+	  "attack_target": "Attack_Far_Left",
+	  "damage": 1,
+	  "attack_move": [
+		"Move_Left",
+		"Move_Forwards_Left_Rotate",
+		"Move_Backwards_Left_Rotate"
+	  ]
+	},
+	{
+	  "name": "Right_Hook_Inga",
+	  "type": "AttackCard",
+	  "attack_target": "Attack_Right",
+	  "damage": 2,
+	  "attack_move": ["Move_Right"]
+	},
+	{
+	  "name": "Svallin_Inga",
+	  "type": "DamageModificationCard",
+	  "damageModifier": -3,
+	  "CannotBeDazed": true
+	},
+	{
+	  "name": "Mjolnir_Inga",
+	  "type": "AttackCardWithRoundEffect",
+	  "attack_target": "Attack_Double_Forwards",
+	  "damage": 4,
+	  "attack_move": [],
+	  "cooldown": true,
+	  "daze": true,
+	  "round_damage": [0, 1, 2]
+	},
+	{
+	  "name": "Left_Hook_Fredo",
+	  "type": "AttackCardWithPreviousCardEffect",
+	  "attack_target": "Attack_Left",
+	  "damage": 3,
+	  "attack_move": [],
+	  "cooldown": false,
+	  "daze": false,
+	  "previous_card_name": "Grill_Guard_Fredo",
+	  "bonus_damage": 1
+	},
+	{
+	  "name": "Right_Hook_Fredo",
+	  "type": "AttackCardWithPreviousCardEffect",
+	  "attack_target": "Attack_Right",
+	  "damage": 3,
+	  "attack_move": [],
+	  "cooldown": false,
+	  "daze": false,
+	  "previous_card_name": "Grill_Guard_Fredo",
+	  "bonus_damage": 1
+	},
+	{
+	  "name": "Uppercut_Fredo",
+	  "type": "AttackCardWithPreviousCardEffect",
+	  "attack_target": "Attack_Forwards",
+	  "damage": 5,
+	  "attack_move": [],
+	  "cooldown": false,
+	  "daze": false,
+	  "previous_card_name": "Grill_Guard_Fredo",
+	  "bonus_damage": 3,
+	  "bonus_daze": true
+	},
+	{
+	  "name": "Grill_Guard_Fredo",
+	  "type": "AttackCard",
+	  "attack_move": ["Rotate_45"],
+	  "comment": "todo damage reduction -2 prevent daze"
+	},
+	{
+	  "name": "Collider_Andrey",
+	  "type": "AttackCardWithPreviousCardEffect",
+	  "attack_target": "Attack_Double_Forwards",
+	  "damage": 2,
+	  "previous_card_name": "Quantum Jab",
+	  "bonus_damage": 2,
+	  "attack_move": ["Move_Right_Rotate"]
+	},
+	{
+	  "name": "Quantum_Jab_Andrey",
+	  "type": "AttackCard",
+	  "attack_target": "Attack_Far_All",
+	  "damage": 1,
+	  "attack_move": ["Move_Left_Rotate", "Move_Right_Rotate"],
+	  "counter": true
+	},
+	{
+	  "name": "Paradox_Andrey",
+	  "type": "AttackCard",
+	  "comment": "todo swap for collider or left_rotate"
+	},
+	{
+	  "name": "Entangle_Andrey",
+	  "type": "AttackCard",
+	  "attack_target": "Attack_Forwards",
+	  "damage": 0,
+	  "comment": "todo if lands, no damage dealt by either character till movement"
+	},
+	{
+	  "name": "Left_Jab_Ellie",
+	  "type": "AttackCard",
+	  "attack_target": "Attack_Far_Left",
+	  "damage": 1,
+	  "attack_move": [
+		"Move_Forwards_Rotate",
+		"Move_Forwards_Right_Rotate",
+		"Move_Right_Rotate",
+		"Move_Backwards_Right_Rotate",
+		"Move_Backwards_Rotate",
+		"Move_Backwards_Left_Rotate",
+		"Move_Left_Rotate",
+		"Move_Forwards_Left_Rotate"
+	  ]
+	},
+	{
+	  "name": "Groove_Ellie",
+	  "type": "AttackCard",
+	  "comment": "todo if you don’t get hit +1 burst or react; double damage from opponent if hit"
+	},
+	{
+	  "name": "Kook_Hook_Ellie",
+	  "type": "AttackCard",
+	  "attack_target": "Attack_Left",
+	  "damage": 3,
+	  "attack_move": ["Move_Left"],
+	  "comment": "todo +1 damage if you have 2 bursts"
+	},
+	{
+	  "name": "Bolo_Punch_Awan",
+	  "type": "AttackCard",
+	  "attack_target": "Attack_Forwards",
+	  "damage": 4,
+	  "daze": true,
+	  "comment": "todo +1 damage and counter if in exchange 5/6"
+	},
+	{
+	  "name": "Flurry_Awan",
+	  "type": "AttackCard",
+	  "attack_target": "Attack_All",
+	  "damage": 1,
+	  "attack_move": ["Move_Right_Rotate"],
+	  "comment": "todo +1 damage and counter if in exchange 5/6"
+	},
+	{
+	  "name": "Left_Jab_Awan",
+	  "type": "AttackCard",
+	  "attack_target": "Attack_Far_Left",
+	  "damage": 1,
+	  "attack_move": [
+		"Move_Forwards_Left_Rotate",
+		"Move_Right_Rotate"
+	  ],
+	  "comment": "todo +1 damage and counter if in exchange 5/6"
+	},
+	{
+	  "name": "Rush_Guard_Awan",
+	  "type": "AttackCard",
+	  "cooldown": true,
+	  "attack_move": ["Move_Forwards_Rotate"],
+	  "comment": "damage reduction -1, Cannot be dazed"
+	},
+	{
+	  "name": "Check_Hook_Roderik",
+	  "type": "AttackCard",
+	  "attack_target": "Attack_Left",
+	  "damage": 1,
+	  "cooldown": true,
+	  "attack_move": ["Move_Left"],
+	  "comment": "todo (+2 if counter)"
+	},
+	{
+	  "name": "Cobra_Cross_Roderik",
+	  "type": "AttackCard",
+	  "attack_target": "Attack_Double_Forwards",
+	  "damage": 1,
+	  "cooldown": true,
+	  "counter": true,
+	  "comment": "todo (+1 if counter)"
+	},
+	{
+	  "name": "Left_Jab_Roderik",
+	  "type": "AttackCard",
+	  "attack_target": "Attack_Far_Left",
+	  "damage": 1,
+	  "counter": true,
+	  "attack_move": [
+		"Move_Left_Rotate",
+		"Move_Right",
+		"Move_Backwards_Rotate"
+	  ]
+	},
+	{
+	  "name": "Coil_Up_Roderik",
+	  "type": "AttackCard",
+	  "cooldown": true,
+	  "comment": "todo prevent all damage; if attack would land, next attack gets +2 damage and daze"
+	},
+	{
+	  "name": "Straight_Nigel",
+	  "type": "AttackCard",
+	  "attack_target": "Attack_Double_Forwards",
+	  "damage": 3,
+	  "attack_move": ["Move_Forwards", "Move_Backwards"]
+	},
+	{
+	  "name": "Wallop_Nigel",
+	  "type": "AttackCard",
+	  "attack_target": "Attack_Left",
+	  "damage": 3,
+	  "cooldown": true,
+	  "comment": "todo if hits, opponent moves backwards 1"
+	},
+	{
+	  "name": "Sway_Nigel",
+	  "type": "AttackCard",
+	  "cooldown": true,
+	  "comment": "dodge; next action must be attack or backwards_rotate"
+	},
+	{
+	  "name": "Right_Jolt_Nigel",
+	  "type": "AttackCard",
+	  "attack_target": "Attack_Far_Right",
+	  "damage": 2,
+	  "attack_move": ["Move_Forwards_Left"]
+	}
+  ]
+  

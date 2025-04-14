@@ -64,9 +64,11 @@ class Board
 		int card_index = 0;
 
 		const Libary& cardList;
-
 		TokenType red_player_token = TokenType::Not_Submitted;
 		TokenType blue_player_token = TokenType::Not_Submitted;
+		
+		// std::array<BaseCard*, 3> red_player_cards;
+		// std::array<BaseCard*, 3> blue_player_cards;
 		
 		std::vector<BaseCard*> red_player_cards, blue_player_cards;
 		std::optional<BaseCard*> red_attack_move, blue_attack_move;
@@ -82,7 +84,7 @@ class Board
 		float eval(bool isPlayerRed = true);
 		int game_winner(bool isPlayerRed = true);
 		bool game_over = false;
-		bool is_game_over(){return game_over;};
+		bool is_game_over() const {return game_over;};
 		bool is_round_over(int round){return round * 6 > turn_count;};
 		int current_round(){return 1 + turn_count/6;};
 		int whos_turn(bool isPlayerRed = true);

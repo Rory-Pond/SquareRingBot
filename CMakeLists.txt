@@ -10,17 +10,39 @@ include(GoogleTest)
 
 enable_testing()
 
-# Add Google Test
-add_subdirectory(external/googletest)
+include(FetchContent)
+FetchContent_Declare(
+  gtest
+  GIT_REPOSITORY https://github.com/google/googletest.git
+  GIT_TAG release-1.11.0  
+)
+FetchContent_Declare(
+  nlohmann_json
+  GIT_REPOSITORY https://github.com/nlohmann/json.git
+  GIT_TAG v3.11.2  
+)
+FetchContent_MakeAvailable(nlohmann_json)
+FetchContent_MakeAvailable(gtest)
 
-# Add executable
-add_executable(SquareRingBot main.cpp Board.cpp Player.cpp  BestCurrent.cpp mcts.cpp)
+# Main Executable
+add_executable(SquareRingBot
+    main.cpp
+    Board.cpp
+    Player.cpp
+    BestCurrent.cpp
+    mcts.cpp
+)
 
-# Create a test executable
-add_executable(test_SquareRing test_main.cpp Board.cpp Player.cpp  BestCurrent.cpp mcts.cpp)
-
-# Link Google Test and pthread
-target_link_libraries(test_SquareRing gtest gtest_main pthread)
+# Test Executable
+add_executable(test_SquareRing
+    test_main.cpp
+    Board.cpp
+    Player.cpp
+    BestCurrent.cpp
+    mcts.cpp
+)
+target_link_libraries(SquareRingBot PRIVATE nlohmann_json::nlohmann_json)
+target_link_libraries(test_SquareRing PRIVATE gtest gtest_main pthread nlohmann_json::nlohmann_json)
 
 # Add the tests to CTest
 add_test(NAME test_SquareRingBot COMMAND test_SquareRing)

@@ -20,14 +20,6 @@ float Board::eval(bool isPlayerRed)
 
 void Board::SetCards()
 {
-	if(red_player_cards.size() == 2)
-	{
-		red_player_cards.push_back(cardList.getCard("Null"));
-	}
-	if(blue_player_cards.size() == 2)
-	{
-		blue_player_cards.push_back(cardList.getCard("Null"));
-	}
 	std::random_device rd;
 	std::mt19937 g(rd());
 	if(player_red.is_dazed)
@@ -42,33 +34,37 @@ void Board::SetCards()
 		std::shuffle(blue_player_cards.begin(), blue_player_cards.end(), g);
 		player_blue.is_dazed = false;
 	}
+	if(red_player_cards.size() == 2)
+	{
+		red_player_cards.push_back(cardList.getCard("Null"));
+	}
+	if(blue_player_cards.size() == 2)
+	{
+		blue_player_cards.push_back(cardList.getCard("Null"));
+	}
 }
 
 void Board::submit_turn_action(const std::vector<BaseCard*> action, bool isPlayerRed)
 {
-	switch (turn_order) 
+	const BaseCard* first_action = action[0];
+
+	if(turn_order == TurnOrder::Token)
 	{
-		case Token:
-		if(isPlayerRed)
-		{
-			red_player_token = action[0]->getToken();
-		}
-		else
-		{
-			blue_player_token = action[0]->getToken();
-		}
-		if(red_player_token != TokenType::Not_Submitted && blue_player_token != TokenType::Not_Submitted)
-		{
+		auto& player_token = isPlayerRed ? red_player_token : blue_player_token;
+		player_token = first_action->getToken();
+
+		if (red_player_token != TokenType::Not_Submitted && blue_player_token != TokenType::Not_Submitted) {
 			turn_order = TurnOrder::Reveal;
 			resolveTokens();
-			if(red_player_token != TokenType::React && blue_player_token != TokenType::React)
-			{
+			if (red_player_token != TokenType::React && blue_player_token != TokenType::React) {
 				turn_order = TurnOrder::Card;
 			}
 		}
 		return;
-		
-		case Reveal:
+	}
+
+	if(turn_order == TurnOrder::Reveal)
+	{
 		if(isPlayerRed)
 		{
 			if(blue_player_token == TokenType::React)
@@ -92,34 +88,28 @@ void Board::submit_turn_action(const std::vector<BaseCard*> action, bool isPlaye
 			blue_player_revealed = false;
 		}
 		return;
-		
-		case Card:
-		if(isPlayerRed)
-		{
-			red_player_cards.insert(red_player_cards.end(), action.begin(), action.end());
-		}
-		else
-		{
-			blue_player_cards.insert(blue_player_cards.end(), action.begin(), action.end());
-		}
-		if(red_player_cards.size() >= 2 && blue_player_cards.size() >= 2)
-		{
+	}
+
+	if(turn_order == TurnOrder::Card)
+	{
+		auto& player_cards = isPlayerRed ? red_player_cards : blue_player_cards;
+		player_cards.insert(player_cards.end(), action.begin(), action.end());
+
+		if (red_player_cards.size() >= 2 && blue_player_cards.size() >= 2) {
 			SetCards();
 			ResolveTurn();
 		}
 		return;
-		case Attack_Move:
-		if(isPlayerRed)
+	}
+
+	if(turn_order == TurnOrder::Attack_Move)
+	{
+		auto& player_attack_move = isPlayerRed ? red_attack_move : blue_attack_move;
+		player_attack_move = action[0];
+
+		if (red_attack_move && blue_attack_move) 
 		{
-			red_attack_move = action[0];
-		}
-		else
-		{
-			blue_attack_move = action[0];
-		}
-		if(red_attack_move.has_value() && blue_attack_move.has_value())
-		{
-			playout_action(red_attack_move.value(), blue_attack_move.value());
+			playout_action(*red_attack_move, *blue_attack_move);
 			red_attack_move.reset();
 			blue_attack_move.reset();
 			red_attack_move_options.clear();
@@ -127,7 +117,6 @@ void Board::submit_turn_action(const std::vector<BaseCard*> action, bool isPlaye
 			ResolveTurn();
 		}
 		return;
-		
 	}
 }
 
@@ -178,7 +167,7 @@ void Board::ResolveTurn()
 			player_blue.win_round();
 		}
 		
-		if(turn_count == 18)
+		if(turn_count == 6)
 		{
 			game_over = true;
 			return;
@@ -527,7 +516,7 @@ void Board::printGrid() {
 		return DIRECTION_LOOKUP[value][isPlayerRed];
 	};
 	
-	std::cout << "Turn " << turn_count << "eval: " << eval() << std::endl;
+	std::cout << "Turn " << turn_count << std::endl << "eval: " << eval() << std::endl;
 	std::cout << "+" << std::string(11, '-') << "+" << std::endl;
 	for (int y = 4; y >= 0; --y) 
 	{

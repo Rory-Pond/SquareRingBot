@@ -4,7 +4,8 @@
 
 struct context
 {
-	/* data */
+	int round_count = 0;
+	std::string previous_card_name;
 };
 
 class BaseCard
@@ -67,7 +68,7 @@ class AttackCard : public BaseCard
 	public:
 		std::vector<int> attack_target;
 		int damage = 0;
-		// bool counter = false;
+		bool counter = false;
 		bool cooldown = false;
 		bool attack_daze = false;
 		std::vector<std::string> attack_move;
@@ -81,6 +82,92 @@ class AttackCard : public BaseCard
 		bool isCooldown() const override {return cooldown;};
 		std::vector<std::string> getAttackMove() const override {return attack_move;};
 		bool daze() const override { return attack_daze; };
+};
+
+class AttackCardWithEffect : public AttackCard
+{
+	private:
+	public:
+		AttackCardWithEffect(std::string name_, std::vector<int> attack_target_, int damage_, std::vector<std::string> attack_move_, bool cooldown_ = false, bool daze_ = false)
+		: AttackCard(name_, attack_target_, damage_, attack_move_, cooldown_, daze_) {};
+		virtual bool isEffectActive() const { return false; }
+		virtual int conditionalDamage() const { return 0; }
+		virtual bool conditionalDaze() const { return false; }
+
+		int getDamage() const override {
+			if (isEffectActive())
+			{
+				return damage + conditionalDamage();
+			}
+			else
+			{
+				return damage;
+			}
+		};
+
+		bool daze() const override { 
+			if (isEffectActive())
+			{
+				return conditionalDaze();
+			}
+			return attack_daze;
+		};
+};
+
+class AttackCardWithRoundEffect : public AttackCardWithEffect
+{
+	private:
+	public:
+		std::array<int, 3> round_damage = {0, 0, 0};
+		AttackCardWithRoundEffect(std::string name_, std::vector<int> attack_target_, int damage_, std::vector<std::string> attack_move_, bool cooldown_ = false, bool daze_ = false, std::array<int, 3> round_damage_ = {0, 0, 0}
+		) : AttackCardWithEffect(name_, attack_target_, damage_, attack_move_, cooldown_, daze_), round_damage(round_damage_) {};
+		
+		bool isEffectActive() const override
+		{
+			return true; 
+		}
+		bool conditionalDaze() const override
+		{
+			return attack_daze;
+		}
+		int conditionalDamage() const override
+		{
+			return 2;// round_damage[context.round_count];
+		}
+};
+
+class AttackCardWithPreviousCardEffect : public AttackCardWithEffect
+{
+	private:
+	public:
+		std::string previous_card_name;
+		int bonus_damage = 0;
+		bool bonus_daze = false;
+
+		AttackCardWithPreviousCardEffect(
+			std::string name_, 
+			std::vector<int> attack_target_, 
+			int damage_, 
+			std::vector<std::string> attack_move_, 
+			bool cooldown_ = false, 
+			bool daze_ = false, 
+			std::string previous_card_name_ = "",
+			int bonus_damage_ = 0,
+			bool bonus_daze_ = false
+		) : AttackCardWithEffect(name_, attack_target_, damage_, attack_move_, cooldown_, daze_), previous_card_name(previous_card_name_), bonus_damage(bonus_damage_), bonus_daze(bonus_daze_) {};
+		
+		bool isEffectActive() const override
+		{
+			return previous_card_name == "2";// context.previous_card_name;
+		}
+		bool conditionalDaze() const override
+		{
+			return bonus_daze;
+		}
+		int conditionalDamage() const override
+		{
+			return bonus_damage;
+		}
 };
 
 class DamageModificationCard : public BaseCard
@@ -108,167 +195,3 @@ class DamageModificationCard : public BaseCard
 			return 0;
 		}
 };
-
-class AttackRoundCard : public BaseCard
-{
-	private:
-	public:
-		int round_1_damage = 0;
-		int round_2_damage = 0;	
-		int round_3_damage = 0;
-		std::vector<int> attack_target;
-		bool cooldown = false;
-		bool attack_daze = false;
-		AttackRoundCard(std::string name_, std::vector<int> attack_target_ , int damage_1, int damage_2, int damage_3, bool cooldown = false, bool attack_daze = false)
-		: BaseCard(name_), attack_target(attack_target_), round_1_damage(damage_1), round_2_damage(damage_2), round_3_damage(damage_3), cooldown(cooldown), attack_daze(attack_daze) {};
-		
-		int getDamage() const override
-		{
-			switch (1) //(context.round_count)
-			{
-				case 1:
-					return round_1_damage;
-				case 2:
-					return round_2_damage;
-				case 3:
-					return round_3_damage;
-				default:
-					return 0;
-			}
-		}
-		std::vector<int> getAttackTarget() const override {return attack_target;};
-		// bool attack_is_counter() const override {return attack_is_counter;};
-		bool isCooldown() const override {return cooldown;};
-		bool daze() const override {return attack_daze;};
-};
-
-// {
-// 	private:
-// 	public:
-// 		std::string name;
-// 		TokenType token = TokenType::Not_Submitted;
-// 		int rotate = 0;
-// 		int move = 0;
-// 		int damage = 0, damage_reduction = 0, attack_damage = 0;
-// 		bool attack_is_dodge = false, attack_is_counter =false;
-// 		bool cooldown = false;
-// 		bool daze = false;
-// 		std::vector<std::string> attack_move = {"Null"};
-// 		std::vector<int> attack_target;
-// 		BaseCard(std::string name_, int rotate_, int move_)
-// 		: name(name_), rotate(rotate_), move(move_) {};
-		
-// 		BaseCard(std::string name_, TokenType token_) 
-// 		: token(token_) {};
-		
-// 		BaseCard(std::string name_)
-// 		: name(name_) {};
-
-// 		virtual std::string getName() {return name;};
-// 		virtual int getMove() {return move;};
-// 		virtual int getRotate() {return rotate;};
-// 		virtual int getDamage() {return damage;};
-// 		virtual int getDamageReduction() {return damage_reduction;};
-// 		virtual bool isAttackDodge() {return attack_is_dodge;};
-// 		virtual bool isAttackCounter() {return attack_is_counter;};
-// 		virtual bool isCooldown() {return cooldown;};
-// 		virtual bool isDaze() {return daze;};
-// 		virtual TokenType getToken() {return token;};
-// 		virtual std::vector<int> getAttackTarget() {return attack_target;};
-// 		virtual std::vector<BaseCard*> getAttackMove() {return {};};
-// 		virtual int addBurst() {return 0;};
-// 		virtual int addReact() {return 0;};
-
-// };
-
-
-// class AttCard : public BaseCard
-// {
-// 	private:
-// 	public:
-// 		AttCard(std::string name_,  std::vector<int> attack_target_ , int damage_, bool cooldown = false, bool daze = false)
-// 		: BaseCard(name_), attack_target(attack_target_), damage(damage_) {};
-		
-// };
-
-// class DamageReductionCard : public BaseCard
-// {
-// 	private:
-// 	public:
-// 		int damageModifier = 0;
-// 		bool increase_Burst = false;
-// 		bool increase_React = false;
-
-// 		BaseCard(std::string name_, int rotate_, int move_, int damage_reduction, bool increase_Burst = false, bool increase_React = false)
-// 		: name(name_), rotate(rotate_), move(move_), damageModifier(damageModifier_), increase_Burst(increase_Burst), increase_React(increase_React) {};
-// 		get_incerease_Burst() {return increase_Burst;};
-// 		get_incerease_React() {return increase_React;};
-// 		int getDamage() const override
-// 		{
-// 			return damage + damageModifier;
-// 		}
-// };
-
-// class RoundCard : public BaseCard
-// {
-// 	private:
-// 	public:
-// 		int round_1_damage = 0;
-// 		int round_2_damage = 0;	
-// 		int round_3_damage = 0;
-// 		RoundCard(std::string name_,  std::vector<int> attack_target_ , int damage_1, int damage_2, int damage_3, bool cooldown = false, bool daze = false)
-// 		: name(name_), attack_target(attack_target_), round_1_damage(damage_1), round_2_damage(damage_2), round_3_damage(damage_3), cooldown(cooldown), daze(daze) {};
-// 		int getDamage() const override
-// 		{
-// 			switch (context.round_count)
-// 			{
-// 				case 1:
-// 					return round_1_damage;
-// 				case 2:
-// 					return round_2_damage;
-// 				case 3:
-// 					return round_3_damage;
-// 				default:
-// 					return 0;
-// 			}
-// 		}
-// };
-
-
-// class PreviousAtctionCard : public BaseCard
-// {
-// 	private:
-// 	public:
-// 		std::string previous_card_name;
-// 		int bonus_damage = 0;
-// 		bool bonus_daze = false;
-// 		PreviousAtctionCard(std::string name_,  std::vector<int> attack_target_ , int damage_, std::string previous_card_name_, int bonus_damage_ = 0, bool bonus_daze_ = false)
-// 		: name(name_), attack_target(attack_target_), damage(damage_), previous_card_name(previous_card_name_), bonus_damage(bonus_damage_), bonus_daze(bonus_daze_) {};
-		
-// 		bool isEffectActive()
-// 		{
-// 			return context.previousPlayedCardName == previous_card_name;
-// 		}
-// 		int getDamage() const override
-// 		{
-// 			if (isEffectActive())
-// 			{
-// 				return damage + bonus_damage;
-// 			}
-// 			else
-// 			{
-// 				return damage;
-// 			}
-// 		}
-// 		bool isDaze() const override
-// 		{
-// 			if (isEffectActive())
-// 			{
-// 				return bonus_daze;
-// 			}
-// 			else
-// 			{
-// 				return daze;
-// 			}
-// 		}
-// };

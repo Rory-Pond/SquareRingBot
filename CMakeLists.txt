@@ -10,19 +10,9 @@ include(GoogleTest)
 
 enable_testing()
 
-include(FetchContent)
-FetchContent_Declare(
-  gtest
-  GIT_REPOSITORY https://github.com/google/googletest.git
-  GIT_TAG release-1.11.0  
-)
-FetchContent_Declare(
-  nlohmann_json
-  GIT_REPOSITORY https://github.com/nlohmann/json.git
-  GIT_TAG v3.11.2  
-)
-FetchContent_MakeAvailable(nlohmann_json)
-FetchContent_MakeAvailable(gtest)
+# Add submodules
+add_subdirectory(extern/json)
+add_subdirectory(extern/googletest)
 
 # Main Executable
 add_executable(SquareRingBot

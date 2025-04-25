@@ -119,7 +119,14 @@ class AttackCardWithRoundEffect : public AttackCardWithEffect
 	private:
 	public:
 		std::array<int, 3> round_damage = {0, 0, 0};
-		AttackCardWithRoundEffect(std::string name_, std::vector<int> attack_target_, int damage_, std::vector<std::string> attack_move_, bool cooldown_ = false, bool daze_ = false, std::array<int, 3> round_damage_ = {0, 0, 0}
+		AttackCardWithRoundEffect(
+			std::string name_,
+			std::vector<int> attack_target_,
+			int damage_,
+			std::vector<std::string> attack_move_,
+			bool cooldown_ = false,
+			bool daze_ = false,
+			std::array<int, 3> round_damage_ = {0, 0, 0} 
 		) : AttackCardWithEffect(name_, attack_target_, damage_, attack_move_, cooldown_, daze_), round_damage(round_damage_) {};
 		
 		bool isEffectActive() const override

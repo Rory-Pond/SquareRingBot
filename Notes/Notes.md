@@ -1,4 +1,7 @@
 # Dev Notes
+Per game the find best move function is called about ~40 times per player can change depending on amount of reacts used in the game
+For calcualating simulation time should roughly x80 the amount of thinking time given per turn to each bot
+
 
 0	Rotate	0	0
 1	Move_Forwards	1	2

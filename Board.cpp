@@ -166,7 +166,7 @@ void Board::ResolveTurn()
 			player_blue.win_round();
 		}
 		
-		if(turn_count == 6)
+		if(turn_count == 18)
 		{
 			game_over = true;
 			return;

@@ -7,7 +7,9 @@
 #include <functional>
 #include <memory>
 #include <nlohmann/json.hpp>
+
 #include "cards.h"
+#include "Board.h"
 
 // using json = nlohmann::json;
 
@@ -52,6 +54,7 @@ namespace CardFactoryFunctions
 		{"Attack_Double_Forwards",{1, 10}},
 		{"Attack_Double_Left",    {2, 12}}
 	};
+	std::vector<Player> create_players_from_json(const std::string& filename);
 
 }
 

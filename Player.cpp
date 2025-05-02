@@ -7,6 +7,7 @@
 #include <algorithm>
 
 #include "main.h"
+#include "Board.h"
 
 
 std::vector<std::vector<BaseCard*>> get_all_moves_recursive(std::vector<BaseCard*> deck, int depth) {

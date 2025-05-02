@@ -10,6 +10,7 @@
 class Player 
 {
 	public:
+		std::string name;	
 		int health = 15;
 		int round_wins = 0;
 		vec2 position;
@@ -21,7 +22,7 @@ class Player
 		int regen = 2;
 		int burst_count = 2;
 		int react_count = 2;
-		
+
 		void win_round();
 		void reset_round(bool isPlayerRed);
 		std::vector<std::vector<BaseCard*>> get_all_moves() const;
@@ -31,8 +32,10 @@ class Player
 
 		Player(int h, vec2 pos, int dir, const std::vector<BaseCard*>& crds)
 		: health(h), position(pos), direction(dir), deck(crds) {}
+		Player(std::string name, int health = 15, int burst_count = 2, int react_count = 2, int regen = 2, std::vector<BaseCard*> deck = {})
+		:name(name), health(health), burst_count(burst_count), react_count(react_count), regen(regen), deck(deck) {}
 
-		std::string character_sprite;
+
 };
 
 class Board

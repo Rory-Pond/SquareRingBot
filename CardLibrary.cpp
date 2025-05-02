@@ -1,10 +1,9 @@
-#include "CardLibrary.h"
-#include "CardFactory.h"
-#include <nlohmann/json.hpp>
 #include <fstream>
 #include <iostream>
+#include <nlohmann/json.hpp>
 
-using json = nlohmann::json;
+#include "CardLibrary.h"
+#include "CardFactory.h"
 
 void CardLibrary::load_from_json(const std::string& filename) {
     std::ifstream file(filename);
@@ -13,7 +12,7 @@ void CardLibrary::load_from_json(const std::string& filename) {
         return;
     }
 
-    json data;
+    nlohmann::json data;
     try {
         file >> data;
     } catch (const std::exception& e) {

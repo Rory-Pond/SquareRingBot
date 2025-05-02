@@ -10,6 +10,7 @@
 #include <mutex>
 
 #include "main.h"
+#include "Board.h"
 
 class RandomBot: public Bot
 {

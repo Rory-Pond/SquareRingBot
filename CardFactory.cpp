@@ -1,20 +1,22 @@
-#include <iostream>
-#include <vector>
-#include <string>
-#include <limits>
 #include <chrono>
-
-#include "main.h"
-#include "libary.h"
-#include "MCTSBot.h"
-#include "Random.h"
-#include "Monte.h"
-
-#include "CardLibrary.h"
-#include "CardFactory.h"
-#include <nlohmann/json.hpp>
 #include <fstream>
 #include <iostream>
+#include <limits>
+#include <stdexcept>
+#include <string>
+#include <vector>
+
+#include <nlohmann/json.hpp>
+
+#include "Board.h"
+#include "main.h"
+#include "CardFactory.h"
+#include "CardLibrary.h"
+#include "libary.h"
+#include "MCTSBot.h"
+#include "Monte.h"
+#include "Random.h"
+
 
 void CardFactoryFunctions::register_card_types() 
 {
@@ -115,4 +117,53 @@ void CardFactoryFunctions::register_card_types()
 	
 		return std::make_unique<DamageModificationCard>(name, damageModifier, cannotBeDazed, increaseBurst);
 	});
+}
+
+std::vector<Player> CardFactoryFunctions::create_players_from_json(const std::string& filename) 
+{
+    std::ifstream file(filename);
+    if (!file) {
+        throw std::runtime_error("Failed to open player JSON file: " + filename);
+    }
+
+    nlohmann::json json_data;
+    try {
+        file >> json_data;
+    } catch (const std::exception& e) {
+        throw std::runtime_error("Failed to parse JSON: " + std::string(e.what()));
+    }
+
+    if (!json_data.is_array()) {
+        throw std::runtime_error("Player JSON must be an array.");
+    }
+
+    std::vector<Player> players;
+
+    for (const auto& player_json : json_data) {
+        try {
+            // Read player attributes from JSON
+            std::string name = player_json.value("name", "Unnamed_Player");
+            int starting_health = player_json.value("starting_health", 15);
+            int starting_burst = player_json.value("starting_burst", 2);
+            int starting_react = player_json.value("starting_react", 2);
+            int health_regen = player_json.value("health_regen", 2);
+
+            // Read card names and convert them to BaseCard* using CardLibrary
+            std::vector<BaseCard*> deck;
+            for (const auto& card_name : player_json.at("cards")) {
+                BaseCard* card = CardLibrary::instance().get_card(card_name);
+                if (!card) {
+                    throw std::runtime_error("Card not found: " + card_name);
+                }
+                deck.push_back(card);
+            }
+
+            // Create a Player object and add it to the vector
+            players.emplace_back(name, starting_health, starting_burst, starting_react, health_regen, deck);
+        } catch (const std::exception& e) {
+            std::cerr << "Error creating player: " << e.what() << std::endl;
+        }
+    }
+
+    return players;
 }

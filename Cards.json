@@ -128,7 +128,8 @@
 	},
 	{
 		"name": "Cannonita_Oscar",
-		"type": "AttackCardWithRoundEffect",
+		"type": "BaseCard",
+		"type2": "AttackCardWithRoundEffect",
 		"attack_target": "Attack_Double_Forwards",
 		"damage": 5,
 		"attack_move": [],
@@ -138,7 +139,8 @@
 	},
 	{
 		"name": "Cajones_Oscar",
-		"type": "DamageModificationCard",
+		"type": "BaseCard",
+		"type2": "DamageModificationCard",
 		"damageModifier": 3,
 		"CannotBeDazed": true,
 		"increase_Burst": true,
@@ -146,7 +148,8 @@
 	},
 	{
 		"name": "Left_Haymaker_Oscar",
-		"type": "AttackCardWithRoundEffect",
+		"type": "BaseCard",
+		"type2": "AttackCardWithRoundEffect",
 		"attack_target": "Attack_Left",
 		"damage": 4,
 		"attack_move": [],
@@ -156,7 +159,8 @@
 	},
 	{
 		"name": "El_Nuke_Oscar",
-		"type": "AttackCardWithRoundEffect",
+		"type": "BaseCard",
+		"type2": "AttackCardWithRoundEffect",
 		"attack_target": "Attack_Left",
 		"damage": 8,
 		"attack_move": [],
@@ -166,7 +170,8 @@
 	},
 	{
 		"name": "Left_Jab_Inga",
-		"type": "AttackCard",
+		"type": "BaseCard",
+		"type2": "AttackCard",
 		"attack_target": "Attack_Far_Left",
 		"damage": 1,
 		"attack_move": [
@@ -177,20 +182,23 @@
 	},
 	{
 		"name": "Right_Hook_Inga",
-		"type": "AttackCard",
+		"type": "BaseCard",
+		"type2": "AttackCard",
 		"attack_target": "Attack_Right",
 		"damage": 2,
 		"attack_move": ["Move_Right"]
 	},
 	{
 		"name": "Svallin_Inga",
-		"type": "DamageModificationCard",
+		"type": "BaseCard",
+		"type2": "DamageModificationCard",
 		"damageModifier": -3,
 		"CannotBeDazed": true
 	},
 	{
 		"name": "Mjolnir_Inga",
-		"type": "AttackCardWithRoundEffect",
+		"type": "BaseCard",
+		"type2": "AttackCardWithRoundEffect",
 		"attack_target": "Attack_Double_Forwards",
 		"damage": 4,
 		"attack_move": [],
@@ -200,7 +208,8 @@
 	},
 	{
 		"name": "Left_Hook_Fredo",
-		"type": "AttackCardWithPreviousCardEffect",
+		"type": "BaseCard",
+		"type2": "AttackCardWithPreviousCardEffect",
 		"attack_target": "Attack_Left",
 		"damage": 3,
 		"attack_move": [],
@@ -211,7 +220,8 @@
 	},
 	{
 		"name": "Right_Hook_Fredo",
-		"type": "AttackCardWithPreviousCardEffect",
+		"type": "BaseCard",
+		"type2": "AttackCardWithPreviousCardEffect",
 		"attack_target": "Attack_Right",
 		"damage": 3,
 		"attack_move": [],
@@ -222,7 +232,8 @@
 	},
 	{
 		"name": "Uppercut_Fredo",
-		"type": "AttackCardWithPreviousCardEffect",
+		"type": "BaseCard",
+		"type2": "AttackCardWithPreviousCardEffect",
 		"attack_target": "Attack_Forwards",
 		"damage": 5,
 		"attack_move": [],
@@ -234,13 +245,15 @@
 	},
 	{
 		"name": "Grill_Guard_Fredo",
-		"type": "AttackCard",
+		"type": "BaseCard",
+		"type2": "AttackCard",
 		"attack_move": ["Rotate_45"],
 		"comment": "todo damage reduction -2 prevent daze"
 	},
 	{
 		"name": "Collider_Andrey",
-		"type": "AttackCardWithPreviousCardEffect",
+		"type": "BaseCard",
+		"type2": "AttackCardWithPreviousCardEffect",
 		"attack_target": "Attack_Double_Forwards",
 		"damage": 2,
 		"previous_card_name": "Quantum Jab",
@@ -249,7 +262,8 @@
 	},
 	{
 		"name": "Quantum_Jab_Andrey",
-		"type": "AttackCard",
+		"type": "BaseCard",
+		"type2": "AttackCard",
 		"attack_target": "Attack_Far_All",
 		"damage": 1,
 		"attack_move": ["Move_Left_Rotate", "Move_Right_Rotate"],
@@ -257,19 +271,22 @@
 	},
 	{
 		"name": "Paradox_Andrey",
-		"type": "AttackCard",
+		"type": "BaseCard",
+		"type2": "AttackCard",
 		"comment": "todo swap for collider or left_Rotate"
 	},
 	{
 		"name": "Entangle_Andrey",
-		"type": "AttackCard",
+		"type": "BaseCard",
+		"type2": "AttackCard",
 		"attack_target": "Attack_Forwards",
 		"damage": 0,
 		"comment": "todo if lands, no damage dealt by either character till movement"
 	},
 	{
 		"name": "Left_Jab_Ellie",
-		"type": "AttackCard",
+		"type": "BaseCard",
+		"type2": "AttackCard",
 		"attack_target": "Attack_Far_Left",
 		"damage": 1,
 		"attack_move": [
@@ -285,20 +302,27 @@
 	},
 	{
 		"name": "Groove_Ellie",
-		"type": "AttackCard",
+		"type": "BaseCard",
+		"type2": "AttackCard",
 		"comment": "todo if you don’t get hit +1 burst or react; double damage from opponent if hit"
 	},
 	{
 		"name": "Kook_Hook_Ellie",
-		"type": "AttackCard",
+		"type": "BaseCard",
+		"type2": "AttackCard",
 		"attack_target": "Attack_Left",
 		"damage": 3,
 		"attack_move": ["Move_Left"],
 		"comment": "todo +1 damage if you have 2 bursts"
 	},
 	{
+		"name": "Godiva_Strafe_Ellie",
+		"type": "BaseCard"
+	},
+	{
 		"name": "Bolo_Punch_Awan",
-		"type": "AttackCard",
+		"type": "BaseCard",
+		"type2": "AttackCard",
 		"attack_target": "Attack_Forwards",
 		"damage": 4,
 		"daze": true,
@@ -306,7 +330,8 @@
 	},
 	{
 		"name": "Flurry_Awan",
-		"type": "AttackCard",
+		"type": "BaseCard",
+		"type2": "AttackCard",
 		"attack_target": "Attack_All",
 		"damage": 1,
 		"attack_move": ["Move_Right_Rotate"],
@@ -314,7 +339,8 @@
 	},
 	{
 		"name": "Left_Jab_Awan",
-		"type": "AttackCard",
+		"type": "BaseCard",
+		"type2": "AttackCard",
 		"attack_target": "Attack_Far_Left",
 		"damage": 1,
 		"attack_move": [
@@ -325,14 +351,16 @@
 	},
 	{
 		"name": "Rush_Guard_Awan",
-		"type": "AttackCard",
+		"type": "BaseCard",
+		"type2": "AttackCard",
 		"cooldown": true,
 		"attack_move": ["Move_Forwards_Rotate"],
 		"comment": "damage reduction -1, Cannot be dazed"
 	},
 	{
 		"name": "Check_Hook_Roderik",
-		"type": "AttackCard",
+		"type": "BaseCard",
+		"type2": "AttackCard",
 		"attack_target": "Attack_Left",
 		"damage": 1,
 		"cooldown": true,
@@ -341,7 +369,8 @@
 	},
 	{
 		"name": "Cobra_Cross_Roderik",
-		"type": "AttackCard",
+		"type": "BaseCard",
+		"type2": "AttackCard",
 		"attack_target": "Attack_Double_Forwards",
 		"damage": 1,
 		"cooldown": true,
@@ -350,7 +379,8 @@
 	},
 	{
 		"name": "Left_Jab_Roderik",
-		"type": "AttackCard",
+		"type": "BaseCard",
+		"type2": "AttackCard",
 		"attack_target": "Attack_Far_Left",
 		"damage": 1,
 		"counter": true,
@@ -362,20 +392,23 @@
 	},
 	{
 		"name": "Coil_Up_Roderik",
-		"type": "AttackCard",
+		"type": "BaseCard",
+		"type2": "AttackCard",
 		"cooldown": true,
 		"comment": "todo prevent all damage; if attack would land, next attack gets +2 damage and daze"
 	},
 	{
 		"name": "Straight_Nigel",
-		"type": "AttackCard",
+		"type": "BaseCard",
+		"type2": "AttackCard",
 		"attack_target": "Attack_Double_Forwards",
 		"damage": 3,
 		"attack_move": ["Move_Forwards", "Move_Backwards"]
 	},
 	{
 		"name": "Wallop_Nigel",
-		"type": "AttackCard",
+		"type": "BaseCard",
+		"type2": "AttackCard",
 		"attack_target": "Attack_Left",
 		"damage": 3,
 		"cooldown": true,
@@ -383,13 +416,15 @@
 	},
 	{
 		"name": "Sway_Nigel",
-		"type": "AttackCard",
+		"type": "BaseCard",
+		"type2": "AttackCard",
 		"cooldown": true,
 		"comment": "dodge; next action must be attack or backwards_Rotate"
 	},
 	{
 		"name": "Right_Jolt_Nigel",
-		"type": "AttackCard",
+		"type": "BaseCard",
+		"type2": "AttackCard",
 		"attack_target": "Attack_Far_Right",
 		"damage": 2,
 		"attack_move": ["Move_Forwards_Left"]

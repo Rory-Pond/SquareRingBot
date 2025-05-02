@@ -23,6 +23,7 @@ add_executable(SquareRingBot
     mcts.cpp
     CardLibrary.cpp
     CardFactory.cpp
+    tournament.cpp
 )
 
 # Test Executable

@@ -1,83 +1,109 @@
 #include <fstream>
-#include <sstream>
-#include <iomanip>
+#include <map>
+#include <vector>
+#include <iomanip> // For formatting output
+#include <sstream> // For CSV formatting
 
-void run_round_robin_tournament_to_file(
-    const std::vector<Player>& players,
-    const std::vector<Bot*>& bots,
-    int games_per_pair,
-    const std::string& output_filename)
+#include "Board.h"
+#include "main.h"
+
+int play_single_game(Player player1, Player player2, Bot& bot)
 {
-    int num_players = players.size();
-    std::map<std::string, std::map<std::string, MatchResult>> results;
+	Board game1(player1, player2);
+	while(!game1.is_game_over())
+	{
+		auto player1_action = bot.find_best_move(game1, true);
+		auto player2_action = bot.find_best_move(game1, false);
+		
+		game1.submit_turn_action(player1_action, true);
+		game1.submit_turn_action(player2_action, false);
+	}
+	
+	return game1.game_winner();
+}
 
-    for (int i = 0; i < num_players; ++i) {
-        for (int j = i + 1; j < num_players; ++j) {
-            Player player1 = players[i];
-            Player player2 = players[j];
-            Bot* bot1 = bots[i];
-            Bot* bot2 = bots[j];
+void run_tournament(const std::vector<Player>& players, Bot& bot, int repeat_matches, const std::string& output_file) {
+    std::map<std::string, int> player_scores; // Map to store player scores
+    std::map<std::string, std::map<std::string, std::tuple<int, int, int>>> results_table; // Nested map for win/tie/loss table
 
-            for (int g = 0; g < games_per_pair; ++g) {
-                bool swap = g % 2 == 1;
-                Player red = swap ? player2 : player1;
-                Player blue = swap ? player1 : player2;
-                Bot* red_bot = swap ? bot2 : bot1;
-                Bot* blue_bot = swap ? bot1 : bot2;
+    // Initialize scores and results table
+    for (const auto& player : players) {
+        player_scores[player.name] = 0;
+        for (const auto& opponent : players) {
+            results_table[player.name][opponent.name] = {0, 0, 0}; // {wins, ties, losses}
+        }
+    }
 
-                Board board(red, blue);
+    // Run the tournament
+    for (size_t i = 0; i < players.size(); ++i) {
+        for (size_t j = 0; j < players.size(); ++j) {
+            for (int repeat = 0; repeat < repeat_matches; ++repeat) {
+                Player player1 = players[i];
+                Player player2 = players[j];
 
-                while (!board.is_game_over()) {
-                    auto red_move = red_bot->find_best_move(board, true);
-                    auto blue_move = blue_bot->find_best_move(board, false);
-                    board.play_moves(red_move, blue_move);  // Implement this
-                }
+                // Play the game
+                int winner = play_single_game(player1, player2, bot);
 
-                int outcome = board.game_winner();
-                std::string red_name = red.get_name();
-                std::string blue_name = blue.get_name();
-
-                if (outcome == 1) {
-                    results[red_name][blue_name].wins++;
-                    results[blue_name][red_name].losses++;
-                } else if (outcome == -1) {
-                    results[red_name][blue_name].losses++;
-                    results[blue_name][red_name].wins++;
-                } else {
-                    results[red_name][blue_name].draws++;
-                    results[blue_name][red_name].draws++;
+                // Update scores and results table
+                if (winner == 1) {
+                    player_scores[player1.name] += 3; // Win = 3 points
+                    std::get<0>(results_table[player1.name][player2.name])++; // Increment wins
+                    std::get<2>(results_table[player2.name][player1.name])++; // Increment losses
+                } else if (winner == -1) {
+                    player_scores[player2.name] += 3; // Win = 3 points
+                    std::get<0>(results_table[player2.name][player1.name])++; // Increment wins
+                    std::get<2>(results_table[player1.name][player2.name])++; // Increment losses
+                } else if (winner == 0) {
+                    player_scores[player1.name] += 1; // Tie = 1 point each
+                    player_scores[player2.name] += 1;
+                    std::get<1>(results_table[player1.name][player2.name])++; // Increment ties
+                    std::get<1>(results_table[player2.name][player1.name])++; // Increment ties
                 }
             }
         }
     }
 
-    // Write results to file
-    std::ofstream out(output_filename);
-    if (!out.is_open()) {
-        std::cerr << "Failed to open output file: " << output_filename << std::endl;
-        return;
+    // Write results to CSV file
+    std::ofstream file(output_file);
+    if (!file) {
+        throw std::runtime_error("Failed to open output file: " + output_file);
     }
 
-    // CSV Header
-    out << "Player";
-    for (const auto& p : players) {
-        out << "," << p.get_name();
+    // Write CSV header
+    file << "#";
+    for (const auto& player : players) {
+        file << "," << player.name;
     }
-    out << "\n";
+    file << "\n";
 
-    for (const auto& p1 : players) {
-        out << p1.get_name();
-        for (const auto& p2 : players) {
-            if (p1.get_name() == p2.get_name()) {
-                out << ",X";
-            } else {
-                const auto& res = results[p1.get_name()][p2.get_name()];
-                out << "," << res.wins << "W " << res.losses << "L " << res.draws << "D";
-            }
+    // Write CSV rows
+    for (const auto& player : players) {
+        file << player.name;
+        for (const auto& opponent : players) {
+            const auto& [wins, ties, losses] = results_table[player.name][opponent.name];
+            file << "," << wins << "/" << ties << "/" << losses;
         }
-        out << "\n";
+        file << "\n";
     }
 
-    out.close();
-    std::cout << "Tournament results written to " << output_filename << std::endl;
+    // Sort players by score
+    std::vector<std::pair<std::string, int>> rankings(player_scores.begin(), player_scores.end());
+    std::sort(rankings.begin(), rankings.end(), [](const auto& a, const auto& b) {
+        return b.second > a.second; // Sort in descending order of score
+    });
+
+    // Print final rankings to screen and file
+    std::cout << "\nFinal Rankings:\n";
+    std::cout << "===============\n";
+    for (size_t rank = 0; rank < rankings.size(); ++rank) {
+        std::cout << rank + 1 << ". " << rankings[rank].first << " - " << rankings[rank].second << " points\n";
+    }
+
+    file << "\nFinal Rankings:\n";
+    file << "===============\n";
+    for (size_t rank = 0; rank < rankings.size(); ++rank) {
+        file << rank + 1 << ". " << rankings[rank].first << " - " << rankings[rank].second << " points\n";
+    }
+
+    file.close();
 }

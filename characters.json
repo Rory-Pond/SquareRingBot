@@ -156,36 +156,17 @@
 		"cards" :
 		[
 			"Rotate_90",
-			"Move_Forwards_Rotate_Damage_Daze",
+			"Move_Forwards_Rotate",
 			"Move_Forwards_Right",
 			"Move_Right",
-			"Move_Backwards_Rotate_Counter",
+			"Move_Backwards_Rotate",
 			"Move_Backwards_Left_Rotate",
 			"Move_Left_Rotate",
 			"Straight_Nigel",
 			"Wallop_Nigel",
 			"Sway_Nigel",
 			"Right_Jolt_Nigel"
-		]
-	},
-	{
-		"name": "tes",
-		"starting_health": 10,
-		"starting_burst": 2,
-		"starting_react": 2,
-		"health_regen": 2,
-		"cards" :
-		[
-			"Rotate_90",
-			"Move_Forwards_Rotate",
-			"Move_Right",
-			"Move_Backwards",
-			"Move_Left",
-			"Move_Forwards_Left_Rotate",
-			"Left_Jab_Inga",
-			"Right_Hook_Inga",
-			"Svallin_Inga",
-			"Mjolnir_Inga"
-		]
+		],
+		"comment":  "Move_Forwards_Rotate_Damage_Daze & Move_Backwards_Rotate_Counter"
 	}
 ]

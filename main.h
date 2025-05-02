@@ -3,10 +3,14 @@
 #include <vector>
 #include <string>
 
+// #include "Board.h"
 #include "constants.h"
 #include "cards.h"
-#include "Board.h"
 #include "libary.h"
+
+class Board;
+class Player;
+
 
 class Bot 
 {
@@ -33,3 +37,5 @@ class MinMax: public Bot
 		int depth, bool isMaximizing, 
 		int alpha, int beta);
 };
+
+void run_tournament(const std::vector<Player>& players, Bot& bot, int repeat_matches, const std::string& output_file);

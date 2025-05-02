@@ -1,19 +1,12 @@
-#include <chrono>
 #include <fstream>
 #include <iostream>
-#include <limits>
-#include <stdexcept>
-#include <string>
-#include <vector>
 
 #include <nlohmann/json.hpp>
 
 #include "Board.h"
-#include "main.h"
+#include "Player.h"
 #include "CardFactory.h"
 #include "CardLibrary.h"
-#include "libary.h"
-#include "MCTSBot.h"
 #include "Monte.h"
 #include "Random.h"
 
@@ -56,8 +49,9 @@ void CardFactoryFunctions::register_card_types()
 		std::vector<std::string> attack_move = j.value("attack_move", std::vector<std::string>{});
 		bool cooldown = j.value("cooldown", false);
 		bool daze = j.value("daze", false);
+		bool counter = j.value("counter", false);
 		
-		return std::make_unique<AttackCard>(name, attack_target, damage, attack_move, cooldown, daze);
+		return std::make_unique<AttackCard>(name, attack_target, damage, attack_move, cooldown, daze, counter);
 	});
 	
 	CardFactory::instance().register_type("AttackCardWithEffect", [](const nlohmann::json& j) {
@@ -67,8 +61,9 @@ void CardFactoryFunctions::register_card_types()
 		std::vector<std::string> attack_move = j.value("attack_move", std::vector<std::string>{});
 		bool cooldown = j.value("cooldown", false);
 		bool daze = j.value("daze", false);
+		bool counter = j.value("counter", false);
 		
-		return std::make_unique<AttackCardWithEffect>(name, attack_target, damage, attack_move, cooldown, daze);
+		return std::make_unique<AttackCardWithEffect>(name, attack_target, damage, attack_move, cooldown, daze, counter);
 	});
 	
 	CardFactory::instance().register_type("AttackCardWithPreviousCardEffect", [](const nlohmann::json& j) {
@@ -81,11 +76,9 @@ void CardFactoryFunctions::register_card_types()
 		std::string previous_card_name = j.value("previous_card_name", "");
 		int bonus_damage = j.value("bonus_damage", 0);
 		bool bonus_daze = j.value("bonus_daze", false);
+		bool counter = j.value("counter", false);
 		
-		return std::make_unique<AttackCardWithPreviousCardEffect>(
-			name, attack_target, damage, attack_move, cooldown, daze,
-			previous_card_name, bonus_damage, bonus_daze
-		);
+		return std::make_unique<AttackCardWithPreviousCardEffect>(name, attack_target, damage, attack_move, cooldown, daze, counter, previous_card_name, bonus_damage, bonus_daze);
 	});
 	
 	CardFactory::instance().register_type("AttackCardWithRoundEffect", [](const nlohmann::json& j) {
@@ -95,6 +88,7 @@ void CardFactoryFunctions::register_card_types()
 		std::vector<std::string> attack_move = j.value("attack_move", std::vector<std::string>{});
 		bool cooldown = j.value("cooldown", false);
 		bool daze = j.value("daze", false);
+		bool counter = j.value("counter", false);
 		std::array<int, 3> round_damage = {0, 0, 0};
 		
 		if (j.contains("round_damage")) {
@@ -104,9 +98,7 @@ void CardFactoryFunctions::register_card_types()
 			}
 		}
 		
-		return std::make_unique<AttackCardWithRoundEffect>(
-			name, attack_target, damage, attack_move, cooldown, daze, round_damage
-		);
+		return std::make_unique<AttackCardWithRoundEffect>(name, attack_target, damage, attack_move, cooldown, daze, counter, round_damage);
 	});
 
 	CardFactory::instance().register_type("DamageModificationCard", [](const nlohmann::json& j) {
@@ -153,7 +145,7 @@ std::vector<Player> CardFactoryFunctions::create_players_from_json(const std::st
             for (const auto& card_name : player_json.at("cards")) {
                 BaseCard* card = CardLibrary::instance().get_card(card_name);
                 if (!card) {
-                    throw std::runtime_error("Card not found: " + card_name);
+                    throw std::runtime_error("Card not found: " + std::string(card_name));
                 }
                 deck.push_back(card);
             }

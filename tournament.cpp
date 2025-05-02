@@ -1,11 +1,10 @@
 #include <fstream>
 #include <map>
-#include <vector>
-#include <iomanip> // For formatting output
-#include <sstream> // For CSV formatting
+#include <iostream>
 
 #include "Board.h"
-#include "main.h"
+#include "Player.h"
+#include "Bots.h"
 
 int play_single_game(Player player1, Player player2, Bot& bot)
 {

@@ -16,14 +16,12 @@ add_subdirectory(external/googletest)
 
 # Main Executable
 add_executable(SquareRingBot
-    main.cpp
+    Main.cpp
     Board.cpp
     Player.cpp
-    BestCurrent.cpp
-    mcts.cpp
     CardLibrary.cpp
     CardFactory.cpp
-    tournament.cpp
+    Tournament.cpp
 )
 
 # Test Executable
@@ -31,8 +29,9 @@ add_executable(test_SquareRing
     test_main.cpp
     Board.cpp
     Player.cpp
-    BestCurrent.cpp
-    mcts.cpp
+    CardLibrary.cpp
+    CardFactory.cpp
+    Tournament.cpp
 )
 target_link_libraries(SquareRingBot PRIVATE nlohmann_json::nlohmann_json)
 target_link_libraries(test_SquareRing PRIVATE gtest gtest_main pthread nlohmann_json::nlohmann_json)

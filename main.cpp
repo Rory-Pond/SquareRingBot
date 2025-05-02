@@ -1,21 +1,9 @@
-#include <iostream>
-#include <vector>
-#include <string>
-#include <limits>
-#include <chrono>
-
-#include "main.h"
-#include "libary.h"
-#include "MCTSBot.h"
+#include "Bots.h"
+#include "Board.h"
 #include "Random.h"
 #include "Monte.h"
-
 #include "CardLibrary.h"
 #include "CardFactory.h"
-#include <nlohmann/json.hpp>
-#include <fstream>
-#include <iostream>
-
 
 int play_game(Board& game1, Bot& bot1, Bot& bot2)
 {
@@ -97,7 +85,6 @@ int play_game(Board& game1, Bot& bot1, Bot& bot2)
 // 	TimedRandomSumBot bot5, bot6;
 // 	RandmSumParrallelBot bot7;
 // 	MCTSBot bot8;
-// 	// // BestCurrent bot3;
 // 	// // MCTSBot bot4;
 // 	Player alice(15, {1,1}, 1, Oscar_Deck);
 // 	Player bob(15, {3,3}, 5, Oscar_Deck);
@@ -124,9 +111,8 @@ int play_game(Board& game1, Bot& bot1, Bot& bot2)
 
 int main() {
     CardFactoryFunctions::register_card_types();
-    // CardLibrary::instance().load_from_json("../cards-simple.json");
-    CardLibrary::instance().load_from_json("../Cards.json");
-    auto players = CardFactoryFunctions::create_players_from_json("../characters.json");
+    CardLibrary::instance().load_from_json("../JSON/Cards.json");
+    auto players = CardFactoryFunctions::create_players_from_json("../JSON/characters.json");
 
     RandomBot bot;
     int repeat_matches = 3;

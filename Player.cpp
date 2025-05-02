@@ -1,14 +1,12 @@
-#include <iostream>
-#include <vector>
-#include <string>
-#include <limits>
-#include <map>
+// #include <iostream>
+// #include <vector>
+// #include <string>
+// #include <limits>
+// #include <map>
 #include <functional>
-#include <algorithm>
+// #include <algorithm>
 
-#include "main.h"
 #include "Board.h"
-
 
 std::vector<std::vector<BaseCard*>> get_all_moves_recursive(std::vector<BaseCard*> deck, int depth) {
 	std::vector<std::vector<BaseCard*>> moves;
@@ -75,78 +73,3 @@ void Player::reset_round(bool isPlayerRed)
 	direction = isPlayerRed ? 1 : 5;
 	health = health + regen;
 }
-
-
-/*
-
-
-std::vector<std::vector<BaseCard*>> get_all_moves_loop_1(std::vector<BaseCard*> deck)
-{
-	std::vector<std::vector<BaseCard*>> moves;
-	for (int i = 0; i < deck.size(); ++i)
-	{
-		moves.push_back({deck[i]});
-	}
-	return moves;
-}
-std::vector<std::vector<BaseCard*>> get_all_moves_loop_2(std::vector<BaseCard*> deck)
-{
-	std::vector<std::vector<BaseCard*>> moves;
-	for (int i = 0; i < deck.size(); ++i)
-	{
-		for (int j = 0; j < deck.size(); ++j)
-		{
-			if(i!=j)
-			{
-				moves.push_back({deck[i], deck[j], });
-			}
-		}
-	}
-	return moves;
-}
-std::vector<std::vector<BaseCard*>> get_all_moves_loop_3(std::vector<BaseCard*> deck)
-{
-	std::vector<std::vector<BaseCard*>> moves;
-	for (int i = 0; i < deck.size(); ++i)
-	{
-		for (int j = 0; j < deck.size(); ++j)
-		{
-			if(i!=j)
-			{
-				for (int k = 0; k < deck.size(); ++k)
-				{
-					if(k!=i && k!=j)
-					{
-						moves.push_back({deck[i], deck[j], deck[k]});
-					}
-				}
-			}
-		}
-	}
-	return moves;
-}
-
-std::string deck_hash(std::vector<BaseCard*> deck)
-{
-	std::string hash;
-	for(auto card : deck)
-	{
-		hash += card.id;
-	}
-	return hash;
-}
-
-std::vector<std::vector<BaseCard*>> get_all_moves_look_up(std::vector<BaseCard*> deck)
-{
-	static std::map<std::string, std::vector<std::vector<BaseCard*>>> move_map;
-	auto key = deck_hash(deck);
-	if(!move_map.contains(key))
-	{
-		std::cout << "new deck: " << key << std::endl;
-		move_map[key] = get_all_moves_loop(deck);
-	}
-
-	return move_map[key];
-}
-
-*/

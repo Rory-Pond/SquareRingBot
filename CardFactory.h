@@ -1,17 +1,8 @@
 #pragma once
 
-#include <unordered_map>
-#include <fstream>
-#include <string>
-#include <vector>
-#include <functional>
-#include <memory>
 #include <nlohmann/json.hpp>
 
-#include "cards.h"
-#include "Board.h"
-
-// using json = nlohmann::json;
+#include "Player.h"
 
 using CardFactoryFunc = std::function<std::unique_ptr<BaseCard>(const nlohmann::json&)>;
 
@@ -57,20 +48,3 @@ namespace CardFactoryFunctions
 	std::vector<Player> create_players_from_json(const std::string& filename);
 
 }
-
-
-
-// std::unordered_map<std::string, std::unique_ptr<BaseCard>> load_cards_from_json(const std::string& filename) {
-// 	std::unordered_map<std::string, std::unique_ptr<BaseCard>> cards;
-	
-// 	std::ifstream in(filename);
-// 	if (!in) throw std::runtime_error("Could not open card JSON file.");
-// 	nlohmann::json card_data; in >> card_data;
-	
-// 	for (const auto& j : card_data) {
-// 		auto card = CardFactory::instance().create(j);
-// 		cards[card->name] = std::move(card);
-// 	}
-	
-// 	return cards;
-// }

@@ -1,12 +1,6 @@
-#include <vector>
-#include <memory>
-#include <cmath>
-#include <limits>
-#include <chrono>
 #include <random>
-#include <iostream>
 
-#include "main.h"
+#include "Bots.h"
 
 struct Node {
     Board state;

@@ -1,11 +1,9 @@
+#include <unordered_map>
+#include <random>
 #include <iostream>
-#include <vector>
-#include <string>
-#include <limits>
 
-#include "main.h"
 #include "Board.h"
-#include "Random.h"
+#include "Player.h"
 #include "CardLibrary.h"
 
 int chebyshev_distance(const vec2& a, const vec2& b) {

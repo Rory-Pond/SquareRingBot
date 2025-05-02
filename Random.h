@@ -1,15 +1,8 @@
 #include <iostream>
-#include <vector>
-#include <string>
-#include <limits>
-#include <algorithm>
 #include <random>
-#include <cstdlib>
-#include <chrono>
 #include <thread>
-#include <mutex>
 
-#include "main.h"
+#include "Bots.h"
 #include "Board.h"
 
 class RandomBot: public Bot

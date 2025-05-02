@@ -1,8 +1,8 @@
 #pragma once
-// #include "main.h"
+
 #include <vector>
 #include <string>
-#include "constants.h"
+#include "Constants.h"
 
 struct context
 {
@@ -12,10 +12,9 @@ struct context
 
 class BaseCard
 {
-
 	public:
 		std::string name;
-		
+
 		virtual std::string getName() const {return name;};
 		virtual int getMove() const {return 0;}
 		virtual int getRotate() const { return 0; }
@@ -26,7 +25,7 @@ class BaseCard
 		virtual bool daze() const { return false; }
 		virtual std::vector<std::string> getAttackMove() const { return {"Null"}; }
 		virtual bool isCooldown() const { return false; }
-		
+
 		virtual bool avoids_daze() const { return false; }
 		virtual int getDamageModification(int damage) const { return damage; }
 		virtual bool dodges_all_attacks() const { return false; }
@@ -34,19 +33,19 @@ class BaseCard
 
 		virtual int addBurst() const { return 0; }
 		virtual int addReact() const { return 0; }
-		
+
 		virtual ~BaseCard() = default;
-		BaseCard(std::string name_)
-		: name(name_) {};
+		BaseCard(std::string name)
+		: name(name) {};
 };
 
 class MoveCard : public BaseCard
 {
 	private:
 	public:
-		MoveCard(std::string name_, int rotate_, int move_)
-		: BaseCard(name_), rotate(rotate_), move(move_) {};
-		
+		MoveCard(std::string name, int rotate, int move)
+		: BaseCard(name), rotate(rotate), move(move) {};
+
 		int rotate = 0;
 		int move = 0;
 		int getMove() const override {return move;};
@@ -58,9 +57,9 @@ class TokenCard : public BaseCard
 	private:
 	public:
 		TokenType token = TokenType::Not_Submitted;
-		TokenCard(std::string name_, TokenType token_)
-		: BaseCard(name_), token(token_) {};
-		
+		TokenCard(std::string name, TokenType token)
+		: BaseCard(name), token(token) {};
+
 		TokenType getToken() const override {return token;};
 };
 
@@ -68,19 +67,26 @@ class AttackCard : public BaseCard
 {
 	private:
 	public:
+		AttackCard(
+			std::string name,
+			std::vector<int> attack_target,
+			int damage,
+			std::vector<std::string> attack_move,
+			bool cooldown = false,
+			bool daze = false,
+			bool counter = false
+		) : BaseCard(name), attack_target(attack_target), damage(damage), attack_move(attack_move), cooldown(cooldown), attack_daze(daze), counter(counter) {};
+
 		std::vector<int> attack_target;
 		int damage = 0;
 		bool counter = false;
 		bool cooldown = false;
 		bool attack_daze = false;
 		std::vector<std::string> attack_move;
-		
-		AttackCard(std::string name_, std::vector<int> attack_target_, int damage_, std::vector<std::string> attack_move_, bool cooldown_ = false, bool daze_ = false)
-		: BaseCard(name_), attack_target(attack_target_), damage(damage_), attack_move(attack_move_), cooldown(cooldown_), attack_daze(daze_) {};
 
 		int getDamage() const override {return damage;};
 		std::vector<int> getAttackTarget() const override {return attack_target;};
-		// bool attack_is_counter() const override {return attack_is_counter;};
+		bool attack_is_counter() const override {return counter;};
 		bool isCooldown() const override {return cooldown;};
 		std::vector<std::string> getAttackMove() const override {return attack_move;};
 		bool daze() const override { return attack_daze; };
@@ -90,8 +96,16 @@ class AttackCardWithEffect : public AttackCard
 {
 	private:
 	public:
-		AttackCardWithEffect(std::string name_, std::vector<int> attack_target_, int damage_, std::vector<std::string> attack_move_, bool cooldown_ = false, bool daze_ = false)
-		: AttackCard(name_, attack_target_, damage_, attack_move_, cooldown_, daze_) {};
+		AttackCardWithEffect(
+			std::string name,
+			std::vector<int> attack_target,
+			int damage,
+			std::vector<std::string> attack_move,
+			bool cooldown = false,
+			bool daze = false,
+			bool counter = false
+		) : AttackCard(name, attack_target, damage, attack_move, cooldown, daze, counter) {};
+
 		virtual bool isEffectActive() const { return false; }
 		virtual int conditionalDamage() const { return 0; }
 		virtual bool conditionalDaze() const { return false; }
@@ -107,7 +121,7 @@ class AttackCardWithEffect : public AttackCard
 			}
 		};
 
-		bool daze() const override { 
+		bool daze() const override {
 			if (isEffectActive())
 			{
 				return conditionalDaze();
@@ -122,18 +136,19 @@ class AttackCardWithRoundEffect : public AttackCardWithEffect
 	public:
 		std::array<int, 3> round_damage = {0, 0, 0};
 		AttackCardWithRoundEffect(
-			std::string name_,
-			std::vector<int> attack_target_,
-			int damage_,
-			std::vector<std::string> attack_move_,
-			bool cooldown_ = false,
-			bool daze_ = false,
-			std::array<int, 3> round_damage_ = {0, 0, 0} 
-		) : AttackCardWithEffect(name_, attack_target_, damage_, attack_move_, cooldown_, daze_), round_damage(round_damage_) {};
-		
+			std::string name,
+			std::vector<int> attack_target,
+			int damage,
+			std::vector<std::string> attack_move,
+			bool cooldown = false,
+			bool daze = false,
+			bool counter = false,
+			std::array<int, 3> round_damage = {0, 0, 0}
+		) : AttackCardWithEffect(name, attack_target, damage, attack_move, cooldown, daze, counter), round_damage(round_damage) {};
+
 		bool isEffectActive() const override
 		{
-			return true; 
+			return true;
 		}
 		bool conditionalDaze() const override
 		{
@@ -154,17 +169,18 @@ class AttackCardWithPreviousCardEffect : public AttackCardWithEffect
 		bool bonus_daze = false;
 
 		AttackCardWithPreviousCardEffect(
-			std::string name_, 
-			std::vector<int> attack_target_, 
-			int damage_, 
-			std::vector<std::string> attack_move_, 
-			bool cooldown_ = false, 
-			bool daze_ = false, 
-			std::string previous_card_name_ = "",
-			int bonus_damage_ = 0,
-			bool bonus_daze_ = false
-		) : AttackCardWithEffect(name_, attack_target_, damage_, attack_move_, cooldown_, daze_), previous_card_name(previous_card_name_), bonus_damage(bonus_damage_), bonus_daze(bonus_daze_) {};
-		
+			std::string name,
+			std::vector<int> attack_target,
+			int damage,
+			std::vector<std::string> attack_move,
+			bool cooldown = false,
+			bool daze = false,
+			bool counter = false,
+			std::string previous_card_name = "",
+			int bonus_damage = 0,
+			bool bonus_daze = false
+		) : AttackCardWithEffect(name, attack_target, damage, attack_move, cooldown, daze, counter), previous_card_name(previous_card_name), bonus_damage(bonus_damage), bonus_daze(bonus_daze) {};
+
 		bool isEffectActive() const override
 		{
 			return previous_card_name == "2";// context.previous_card_name;
@@ -187,8 +203,12 @@ class DamageModificationCard : public BaseCard
 		bool CannotBeDazed = false;
 		bool increase_Burst_ = false;
 
-		DamageModificationCard(std::string name_, int damageModifier_ = 0, bool CannotBeDazed_ = false, bool increase_Burst_ = false)
-		: BaseCard(name_), damageModifier(damageModifier_), CannotBeDazed(CannotBeDazed_), increase_Burst_(increase_Burst_) {};
+		DamageModificationCard(
+			std::string name,
+			int damageModifier_ = 0,
+			bool CannotBeDazed_ = false,
+			bool increase_Burst_ = false
+		) : BaseCard(name), damageModifier(damageModifier_), CannotBeDazed(CannotBeDazed_), increase_Burst_(increase_Burst_) {};
 
 		int getDamageModification(int damage) const override
 		{

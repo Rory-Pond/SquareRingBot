@@ -1,5 +1,7 @@
 #pragma once
 // #include "main.h"
+#include <vector>
+#include <string>
 #include "constants.h"
 
 struct context
@@ -10,9 +12,9 @@ struct context
 
 class BaseCard
 {
-	protected:
-		std::string name;
+
 	public:
+		std::string name;
 		
 		virtual std::string getName() const {return name;};
 		virtual int getMove() const {return 0;}

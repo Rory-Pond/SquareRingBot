@@ -42,8 +42,8 @@ class Board
 		std::vector<std::vector<BaseCard*>> get_all_moves(bool isPlayerRed) const;
 		int turn_count = 0;
 		Player player_red, player_blue;
-		Board(const Libary& cardList, Player p_1, Player p_2)
-		: player_red(p_1), player_blue(p_2), cardList(cardList)
+		Board(Player p_1, Player p_2)
+		: player_red(p_1), player_blue(p_2)
 		{
 			player_red.deck = p_1.deck;
 			player_blue.deck = p_2.deck;
@@ -63,7 +63,6 @@ class Board
 		bool blue_player_revealed = false;
 		int card_index = 0;
 
-		const Libary& cardList;
 		TokenType red_player_token = TokenType::Not_Submitted;
 		TokenType blue_player_token = TokenType::Not_Submitted;
 		

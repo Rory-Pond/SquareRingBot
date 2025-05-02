@@ -75,7 +75,7 @@ Move_Forwards_Left_Rotate
 Left Jab
 	- far left attack
 	- 1 damage
-	- attack move left, up_left_rotate, down_left_rotate
+	- attack move left, up_left_Rotate, down_left_Rotate
 
 Right Hook
 	- attack_right, 
@@ -105,7 +105,7 @@ Move_Forwards_Left
 
 Collider
 	- attack double forwards
-	- attack move: right_rotate
+	- attack move: right_Rotate
 	- 2 damage
 	- +2 if last action was quantum jab
   
@@ -113,10 +113,10 @@ Quantum Jab
 	- attack all far
 	- 1 damage
 	- counter
-	- attack move left_rotate right_rotate
+	- attack move left_Rotate right_Rotate
 
 Paradox
-	- swap for collider or left_rotate
+	- swap for collider or left_Rotate
 
 Entangle
 	- attack forwards
@@ -173,19 +173,19 @@ Bolo Punch
 Flurry
 	- attack all
 	- 1 damage
-	- attack move right_rotate
+	- attack move right_Rotate
 	- +1 damage and counter if in exchange 5/6
 
 Left Jab
 	- attack far left
 	- 1 damage
-	- attack move up_left_rotate, right_rotate
+	- attack move up_left_Rotate, right_Rotate
 	- +1 damage and counter if in exchange 5/6
 
 Rush Guard
 	- -1 damage
 	- Cannot be dazed
-	- attack move forawards_rotate
+	- attack move forawards_Rotate
 	- cooldown
 
 
@@ -216,13 +216,13 @@ Left Jab
 	- attack far left
 	- counter
 	- 1 damage
-	- attack move: left_rotate, right, back_rotate
+	- attack move: left_Rotate, right, back_Rotate
 
 Left Jab2
 	- attack far left
 	- counter
 	- 1 damage
-	- attack move: left_rotate, right, back_rotate
+	- attack move: left_Rotate, right, back_Rotate
 
 Coil Up
 	- prevent all damage
@@ -251,7 +251,7 @@ Wallop
 Sway
 	- cooldown
 	- dodge
-	- next action must be attack or backwards_rotate
+	- next action must be attack or backwards_Rotate
 
 Right Jolt
 	- attack far right 

@@ -38,21 +38,21 @@ class Libary
 		cards["Rotate_45"] = std::make_unique<MoveCard>("Rotate_45", 1, 0);
 		cards["Rotate_90"] = std::make_unique<MoveCard>("Rotate_90", 2, 0);
 		cards["Move_Forwards"] = std::make_unique<MoveCard>("Move_Forwards", 0, 1);
-		cards["Move_Forwards_Rotate"] = std::make_unique<MoveCard>("Move_Forwards_rotate", 1, 1);
+		cards["Move_Forwards_Rotate"] = std::make_unique<MoveCard>("Move_Forwards_Rotate", 1, 1);
 		cards["Move_Forwards_Right"] = std::make_unique<MoveCard>("Move_Forwards_Right", 0, 2);
-		cards["Move_Forwards_Right_Rotate"] = std::make_unique<MoveCard>("Move_Forwards_Right_rotate", 1, 2);
+		cards["Move_Forwards_Right_Rotate"] = std::make_unique<MoveCard>("Move_Forwards_Right_Rotate", 1, 2);
 		cards["Move_Right"] = std::make_unique<MoveCard>("Move_Right", 0, 3);
-		cards["Move_Right_Rotate"] = std::make_unique<MoveCard>("Move_Right_rotate", 1, 3);
+		cards["Move_Right_Rotate"] = std::make_unique<MoveCard>("Move_Right_Rotate", 1, 3);
 		cards["Move_Backwards_Right"] = std::make_unique<MoveCard>("Move_Backwards_Right", 0, 4);
-		cards["Move_Backwards_Right_Rotate"] = std::make_unique<MoveCard>("Move_Backwards_Right_rotate", 1, 4);
+		cards["Move_Backwards_Right_Rotate"] = std::make_unique<MoveCard>("Move_Backwards_Right_Rotate", 1, 4);
 		cards["Move_Backwards"] = std::make_unique<MoveCard>("Move_Backwards", 0, 5);
-		cards["Move_Backwards_Rotate"] = std::make_unique<MoveCard>("Move_Backwards_rotate", 1, 5);
+		cards["Move_Backwards_Rotate"] = std::make_unique<MoveCard>("Move_Backwards_Rotate", 1, 5);
 		cards["Move_Backwards_Left"] = std::make_unique<MoveCard>("Move_Backwards_Left", 0, 6);
-		cards["Move_Backwards_Left_Rotate"] = std::make_unique<MoveCard>("Move_Backwards_Left_rotate", 1, 6);
+		cards["Move_Backwards_Left_Rotate"] = std::make_unique<MoveCard>("Move_Backwards_Left_Rotate", 1, 6);
 		cards["Move_Left"] = std::make_unique<MoveCard>("Move_Left", 0, 7);
-		cards["Move_Left_Rotate"] = std::make_unique<MoveCard>("Move_Left_rotate", 1, 7);
+		cards["Move_Left_Rotate"] = std::make_unique<MoveCard>("Move_Left_Rotate", 1, 7);
 		cards["Move_Forwards_Left"] = std::make_unique<MoveCard>("Move_Forwards_Left", 0, 8);
-		cards["Move_Forwards_Left_Rotate"] = std::make_unique<MoveCard>("Move_Forwards_Left_rotate", 1, 8);
+		cards["Move_Forwards_Left_Rotate"] = std::make_unique<MoveCard>("Move_Forwards_Left_Rotate", 1, 8);
 		cards["Token_None"] = std::make_unique<TokenCard>("Token_None", TokenType::None);
 		cards["Token_Burst"] = std::make_unique<TokenCard>("Token_Burst", TokenType::Burst);
 		cards["Token_React"] = std::make_unique<TokenCard>("Token_React", TokenType::React);
@@ -74,7 +74,7 @@ class Libary
 		
 		// cards["Collider_Andrey"] = std::make_unique<PreviousCardEffect>("Collider_Andrey", Attack_Double_Forwards, 2, "Quantum Jab", +2, std::vector<std::string>{"Move_Right_Rotate"});
 		// // cards["Quantum_Jab_Andrey"] = std::make_unique<AttackCard>("Quantum_Jab_Andrey", Attack_Far_All, 1, "Move_Left_Rotate", "Move_Right_Rotate", HAS_COUNTER);
-		// // cards["Paradox_Andrey"] = std::make_unique<AttackCard>("Paradox_Andrey");  //todo swap for collider or left_rotate
+		// // cards["Paradox_Andrey"] = std::make_unique<AttackCard>("Paradox_Andrey");  //todo swap for collider or left_Rotate
 		// // cards["Entangle_Andrey"] = std::make_unique<AttackCard>("Entangle_Andrey", Attack_Forwards, 0); //todo if lands, no damage dealt by either character till movement
 		
 		// // cards["Left_Jab_Ellie"] = std::make_unique<AttackCard>("Left_Jab_Ellie", Attack_Far_Left, 1, std::vector<std::string>{"Move_Forwards_Rotate", "Move_Forwards_Right_Rotate", "Move_Right_Rotate", "Move_Backwards_Right_Rotate", "Move_Backwards_Rotate", "Move_Backwards_Left_Rotate", "Move_Left_Rotate", "Move_Forwards_Left_Rotate"});
@@ -94,7 +94,7 @@ class Libary
 		
 		// // cards["Straight_Nigel"] = std::make_unique<AttackCard>("Straight_Nigel", Attack_Double_Forwards, 3, std::vector<std::string>{"Move_Forwards", "Move_Backwards"}); {"Straight_Nigel", std::make_unique<AttackCard>("Straight_Nigel", Attack_Double_Forwards, 3, {"Move_Forwards", "Move_Backwards"}  ) },
 		// // cards["Wallop_Nigel"] = std::make_unique<AttackCard>("Wallop_Nigel", Attack_Left, 3, HAS_COOLDOWN);  //todo if hits, opponent moves backwards 1
-		// // cards["Sway_Nigel"] = std::make_unique<AttackCard>("Sway_Nigel", HAS_COOLDOWN); //dodge; next action must be attack or backwards_rotate
+		// // cards["Sway_Nigel"] = std::make_unique<AttackCard>("Sway_Nigel", HAS_COOLDOWN); //dodge; next action must be attack or backwards_Rotate
 		// // cards["Right_Jolt_Nigel"] = std::make_unique<AttackCard>("Right_Jolt_Nigel", Attack_Far_Right, 2, std::vector<std::string>{"Move_Forwards_Left"});
 		
 	}

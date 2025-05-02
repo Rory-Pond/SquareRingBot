@@ -36,7 +36,7 @@ void CardLibrary::load_from_json(const std::string& filename) {
                 continue;
             }
 
-            auto card = CardFactory::instance().create(type, card_json);
+            auto card = CardFactory::instance().create(card_json);
             if (!card) {
                 std::cerr << "Factory failed to create card of type " << type << " for " << name << "\n";
                 continue;

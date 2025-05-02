@@ -11,8 +11,8 @@ include(GoogleTest)
 enable_testing()
 
 # Add submodules
-add_subdirectory(extern/json)
-add_subdirectory(extern/googletest)
+add_subdirectory(external/json)
+add_subdirectory(external/googletest)
 
 # Main Executable
 add_executable(SquareRingBot
@@ -21,6 +21,8 @@ add_executable(SquareRingBot
     Player.cpp
     BestCurrent.cpp
     mcts.cpp
+    CardLibrary.cpp
+    CardFactory.cpp
 )
 
 # Test Executable

@@ -3,7 +3,8 @@
 #include <unordered_map>
 #include <memory>
 #include <string>
-#include "BaseCard.h"
+#include <iostream>
+#include "cards.h"
 
 class CardLibrary {
 public:
@@ -12,12 +13,12 @@ public:
         return lib;
     }
 
-    const BaseCard* get_card(const std::string& name) const {
+    BaseCard* get_card(const std::string& name) const {
         auto it = cards.find(name);
         if (it != cards.end()) {
-            return it->second.get(); // safe const pointer
+            return it->second.get();
         }
-        return nullptr; // or throw an exception
+        throw std::runtime_error("Card not found: " + name);
     }
 
     void load_from_json(const std::string& filename); // assumes you implement this
@@ -31,7 +32,6 @@ private:
     friend const BaseCard* library(const std::string&); // allow access to private
 };
 
-// Global helper
-inline const BaseCard* find_card(const std::string& name) {
+inline BaseCard* find_card(const std::string& name) {
     return CardLibrary::instance().get_card(name);
 }

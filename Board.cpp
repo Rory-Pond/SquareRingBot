@@ -6,6 +6,7 @@
 #include "main.h"
 #include "Board.h"
 #include "Random.h"
+#include "CardLibrary.h"
 
 int chebyshev_distance(const vec2& a, const vec2& b) {
 	return std::max(std::abs(b.x - a.x), std::abs(b.y - a.y));
@@ -36,11 +37,11 @@ void Board::SetCards()
 	}
 	if(red_player_cards.size() == 2)
 	{
-		red_player_cards.push_back(cardList.getCard("Null"));
+		red_player_cards.push_back(find_card("Null"));
 	}
 	if(blue_player_cards.size() == 2)
 	{
-		blue_player_cards.push_back(cardList.getCard("Null"));
+		blue_player_cards.push_back(find_card("Null"));
 	}
 }
 
@@ -233,14 +234,14 @@ std::vector<std::vector<BaseCard*>> Board::get_all_moves(bool isPlayerRed) const
 		case Token:
 		{
 			std::vector<std::vector<BaseCard*>> token_options;
-			token_options.push_back({cardList.getCard("Token_None")});
+			token_options.push_back({find_card("Token_None")});
 			
 			const Player& current_player = isPlayerRed ? player_red : player_blue;
 			if (current_player.react_count > 0) {
-				token_options.push_back({cardList.getCard("Token_React")});
+				token_options.push_back({find_card("Token_React")});
 			}
 			if (current_player.burst_count > 0) {
-				token_options.push_back({cardList.getCard("Token_Burst")});
+				token_options.push_back({find_card("Token_Burst")});
 			}
 			return token_options;
 		}
@@ -251,13 +252,13 @@ std::vector<std::vector<BaseCard*>> Board::get_all_moves(bool isPlayerRed) const
 			{
 				return (blue_player_token == TokenType::React)
 				? player_red.get_all_actions_for_cards(1)
-				: std::vector<std::vector<BaseCard*>>{{cardList.getCard("Null")}};
+				: std::vector<std::vector<BaseCard*>>{{find_card("Null")}};
 			}
 			else
 			{
 				return (red_player_token == TokenType::React)
 				? player_blue.get_all_actions_for_cards(1)
-				: std::vector<std::vector<BaseCard*>>{{cardList.getCard("Null")}};
+				: std::vector<std::vector<BaseCard*>>{{find_card("Null")}};
 			}
 		}
 		
@@ -474,7 +475,7 @@ std::vector<std::vector<BaseCard*>> Board::LookUpBasicCards(std::vector<std::str
 	std::vector<std::vector<BaseCard*>> result;
 	for(auto name : card_names)
 	{
-		result.push_back({cardList.getCard(name)});
+		result.push_back({find_card(name)});
 	}
 	return result;
 }

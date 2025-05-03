@@ -170,8 +170,7 @@
 	},
 	{
 		"name": "Left_Jab_Inga",
-		"type": "BaseCard",
-		"type2": "AttackCard",
+		"type": "AttackCard",
 		"attack_target": "Attack_Far_Left",
 		"damage": 1,
 		"attack_move": [
@@ -182,8 +181,7 @@
 	},
 	{
 		"name": "Right_Hook_Inga",
-		"type": "BaseCard",
-		"type2": "AttackCard",
+		"type": "AttackCard",
 		"attack_target": "Attack_Right",
 		"damage": 2,
 		"attack_move": ["Move_Right"]
@@ -262,8 +260,7 @@
 	},
 	{
 		"name": "Quantum_Jab_Andrey",
-		"type": "BaseCard",
-		"type2": "AttackCard",
+		"type": "AttackCard",
 		"attack_target": "Attack_Far_All",
 		"damage": 1,
 		"attack_move": ["Move_Left_Rotate", "Move_Right_Rotate"],
@@ -285,8 +282,7 @@
 	},
 	{
 		"name": "Left_Jab_Ellie",
-		"type": "BaseCard",
-		"type2": "AttackCard",
+		"type": "AttackCard",
 		"attack_target": "Attack_Far_Left",
 		"damage": 1,
 		"attack_move": [
@@ -308,8 +304,7 @@
 	},
 	{
 		"name": "Kook_Hook_Ellie",
-		"type": "BaseCard",
-		"type2": "AttackCard",
+		"type": "AttackCard",
 		"attack_target": "Attack_Left",
 		"damage": 3,
 		"attack_move": ["Move_Left"],
@@ -322,7 +317,7 @@
 	{
 		"name": "Bolo_Punch_Awan",
 		"type": "BaseCard",
-		"type2": "AttackCard",
+		"type2": "AttackCardWithRoundEffect",
 		"attack_target": "Attack_Forwards",
 		"damage": 4,
 		"daze": true,
@@ -331,7 +326,7 @@
 	{
 		"name": "Flurry_Awan",
 		"type": "BaseCard",
-		"type2": "AttackCard",
+		"type2": "AttackCardWithRoundEffect",
 		"attack_target": "Attack_All",
 		"damage": 1,
 		"attack_move": ["Move_Right_Rotate"],
@@ -340,7 +335,7 @@
 	{
 		"name": "Left_Jab_Awan",
 		"type": "BaseCard",
-		"type2": "AttackCard",
+		"type2": "AttackCardWithRoundEffect",
 		"attack_target": "Attack_Far_Left",
 		"damage": 1,
 		"attack_move": [
@@ -359,8 +354,7 @@
 	},
 	{
 		"name": "Check_Hook_Roderik",
-		"type": "BaseCard",
-		"type2": "AttackCard",
+		"type": "AttackCard",
 		"attack_target": "Attack_Left",
 		"damage": 1,
 		"cooldown": true,
@@ -369,8 +363,7 @@
 	},
 	{
 		"name": "Cobra_Cross_Roderik",
-		"type": "BaseCard",
-		"type2": "AttackCard",
+		"type": "AttackCard",
 		"attack_target": "Attack_Double_Forwards",
 		"damage": 1,
 		"cooldown": true,

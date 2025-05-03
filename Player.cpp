@@ -1,10 +1,5 @@
-// #include <iostream>
-// #include <vector>
-// #include <string>
-// #include <limits>
-// #include <map>
 #include <functional>
-// #include <algorithm>
+#include <algorithm>
 
 #include "Board.h"
 

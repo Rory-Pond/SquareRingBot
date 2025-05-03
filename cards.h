@@ -2,6 +2,8 @@
 
 #include <vector>
 #include <string>
+#include <array>
+
 #include "Constants.h"
 
 struct context

@@ -11,7 +11,7 @@ class RandomBot: public Bot
 	std::vector<BaseCard*> find_best_move(const Board& board, bool isPlayerRed)
 	{
 		auto moves = board.get_all_moves(isPlayerRed);
-		if (moves.empty()) return {};
+		if (moves.empty()) throw std::runtime_error("No moves available for the given board state.");
 		
 		static std::random_device rd;
 		static std::mt19937 rng(rd());

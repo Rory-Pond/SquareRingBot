@@ -1,6 +1,7 @@
 #include <fstream>
 #include <map>
 #include <iostream>
+#include <algorithm>
 
 #include "Board.h"
 #include "Player.h"
@@ -88,7 +89,7 @@ void run_tournament(const std::vector<Player>& players, Bot& bot, int repeat_mat
     // Sort players by score
     std::vector<std::pair<std::string, int>> rankings(player_scores.begin(), player_scores.end());
     std::sort(rankings.begin(), rankings.end(), [](const auto& a, const auto& b) {
-        return b.second > a.second; // Sort in descending order of score
+        return b.second < a.second; // Sort in ascending order of score
     });
 
     // Print final rankings to screen and file
